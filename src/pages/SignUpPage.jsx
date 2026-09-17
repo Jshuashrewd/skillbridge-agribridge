@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import MobileShell from '../components/MobileShell'
+import AuthLayout from '../components/AuthLayout'
 import RoleCard from '../components/RoleCard'
 import SignUpStepper from '../components/SignUpStepper'
-import Toast from '../components/Toast'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 
 const PASSWORD_RULES = [
   { key: 'len', label: 'At least 8 characters', test: (pw) => pw.length >= 8 },
@@ -13,6 +13,24 @@ const PASSWORD_RULES = [
   { key: 'number', label: 'One number', test: (pw) => /\d/.test(pw) },
   { key: 'symbol', label: 'One symbol (e.g. !, @, #, $)', test: (pw) => /[^A-Za-z0-9]/.test(pw) },
 ]
+
+const STEP_CONTENT = {
+  create: {
+    headline: 'Join a global community of learners and creators',
+    subtext: 'Gain practical skills, advance your career, or share your expertise.',
+  },
+  role: {
+    headline: 'Your path starts here',
+    subtext: "Tell SkillBridge what you want to do so we can shape the right experience for you.",
+  },
+  verify: {
+    headline: 'One quick step',
+    subtext: 'Verify your email to secure your SkillBridge account and unlock course access.',
+  },
+}
+
+const inputClass =
+  'rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
 
 function readableAuthError(error) {
   const code = error?.code ?? ''
@@ -26,6 +44,7 @@ function readableAuthError(error) {
 export default function SignUpPage() {
   const { user, signUp, continueWithGoogle, setUserRole } = useAuth()
   const navigate = useNavigate()
+  const showToast = useToast()
 
   const [step, setStep] = useState('create')
   const [firstName, setFirstName] = useState('')
@@ -34,7 +53,6 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('learner')
   const [error, setError] = useState('')
-  const [toast, setToast] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   const passwordChecks = PASSWORD_RULES.map((rule) => ({ ...rule, met: rule.test(password) }))
@@ -76,7 +94,7 @@ export default function SignUpPage() {
 
   async function handleRoleContinue() {
     if (role === 'tutor') {
-      setToast('Tutor accounts are coming soon — continue as a Learner for now.')
+      showToast('Tutor accounts are coming soon — continue as a Learner for now.')
       return
     }
     setSubmitting(true)
@@ -96,14 +114,13 @@ export default function SignUpPage() {
   }
 
   return (
-    <MobileShell className="px-md py-xl">
-      <Toast message={toast} onDismiss={() => setToast('')} />
+    <AuthLayout headline={STEP_CONTENT[step].headline} subtext={STEP_CONTENT[step].subtext}>
       <SignUpStepper current={step} />
 
       {step === 'create' ? (
         <>
           <div className="mt-lg mb-lg">
-            <h1 className="text-h1 text-neutral-950">Create your account</h1>
+            <h1 className="text-h2 text-neutral-950">Create your account</h1>
             <p className="mt-2xs text-body text-neutral-600">Get started with SkillBridge today.</p>
           </div>
 
@@ -111,7 +128,7 @@ export default function SignUpPage() {
             type="button"
             onClick={handleGoogle}
             disabled={submitting}
-            className="flex w-full items-center justify-center gap-2xs rounded-md border border-green-600 py-sm text-body font-semibold text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
+            className="focus-ring flex min-h-11 w-full items-center justify-center gap-2xs rounded-md border border-green-600 py-sm text-body font-semibold text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
           >
             <span className="font-bold">G</span> Continue with Google
           </button>
@@ -123,7 +140,7 @@ export default function SignUpPage() {
           </div>
 
           <form onSubmit={handleCreateAccount} className="flex flex-col gap-md">
-            <div className="flex gap-sm">
+            <div className="flex flex-col gap-md sm:flex-row sm:gap-sm">
               <label className="flex flex-1 flex-col gap-2xs">
                 <span className="text-caption text-neutral-600">First name</span>
                 <input
@@ -132,7 +149,7 @@ export default function SignUpPage() {
                   value={firstName}
                   onChange={(event) => setFirstName(event.target.value)}
                   placeholder="e.g. John"
-                  className="rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none focus:border-green-600"
+                  className={inputClass}
                 />
               </label>
               <label className="flex flex-1 flex-col gap-2xs">
@@ -143,7 +160,7 @@ export default function SignUpPage() {
                   value={lastName}
                   onChange={(event) => setLastName(event.target.value)}
                   placeholder="e.g. Doe"
-                  className="rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none focus:border-green-600"
+                  className={inputClass}
                 />
               </label>
             </div>
@@ -157,7 +174,7 @@ export default function SignUpPage() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="you@example.com"
-                className="rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none focus:border-green-600"
+                className={inputClass}
               />
             </label>
 
@@ -170,16 +187,13 @@ export default function SignUpPage() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 placeholder="••••••••"
-                className="rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none focus:border-green-600"
+                className={inputClass}
               />
             </label>
 
             <div className="flex flex-wrap gap-x-sm gap-y-2xs text-caption">
               {passwordChecks.map((rule) => (
-                <span
-                  key={rule.key}
-                  className={rule.met ? 'text-green-700' : 'text-neutral-600'}
-                >
+                <span key={rule.key} className={rule.met ? 'text-green-700' : 'text-neutral-600'}>
                   {rule.met ? '✓' : '·'} {rule.label}
                 </span>
               ))}
@@ -192,7 +206,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={!createValid || submitting}
-              className="rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
+              className="focus-ring min-h-11 rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
             >
               {submitting ? 'Please wait…' : 'Create account'}
             </button>
@@ -200,7 +214,10 @@ export default function SignUpPage() {
 
           <p className="mt-md text-center text-caption text-neutral-600">
             Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-green-700">
+            <Link
+              to="/login"
+              className="focus-ring rounded-sm font-semibold text-green-700 hover:text-green-800 hover:underline"
+            >
               Log in
             </Link>
           </p>
@@ -210,7 +227,7 @@ export default function SignUpPage() {
       {step === 'role' ? (
         <>
           <div className="mt-lg mb-lg">
-            <h1 className="text-h1 text-neutral-950">Tell us about you</h1>
+            <h1 className="text-h2 text-neutral-950">Tell us about you</h1>
             <p className="mt-2xs text-body text-neutral-600">What brings you to SkillBridge?</p>
           </div>
 
@@ -239,14 +256,14 @@ export default function SignUpPage() {
             type="button"
             onClick={handleRoleContinue}
             disabled={submitting}
-            className="mt-lg rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
+            className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
           >
             Continue
           </button>
           <button
             type="button"
             onClick={() => setStep('create')}
-            className="mt-sm text-center text-body font-semibold text-green-700"
+            className="focus-ring mt-sm flex min-h-11 w-full items-center justify-center rounded-md text-body font-semibold text-green-700 transition-colors hover:bg-green-100"
           >
             Back
           </button>
@@ -256,7 +273,7 @@ export default function SignUpPage() {
       {step === 'verify' ? (
         <>
           <div className="mt-lg mb-lg">
-            <h1 className="text-h1 text-neutral-950">Verify your email</h1>
+            <h1 className="text-h2 text-neutral-950">Verify your email</h1>
             <p className="mt-2xs text-body text-neutral-600">
               We've sent a 6-digit code to {user?.email ?? 'your email'}
             </p>
@@ -269,14 +286,15 @@ export default function SignUpPage() {
                 type="text"
                 inputMode="numeric"
                 maxLength={1}
-                className="h-12 w-11 rounded-md border border-neutral-200 bg-neutral-50 text-center text-h1 text-neutral-950 outline-none focus:border-green-600"
+                aria-label={`Verification code digit ${index + 1}`}
+                className={`h-12 w-11 rounded-md border border-neutral-200 bg-neutral-50 text-center text-h1 text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20`}
               />
             ))}
           </div>
 
           <p className="mt-sm text-center text-caption text-neutral-600">
             Didn't receive the code?{' '}
-            <button type="button" className="font-semibold text-green-700" disabled>
+            <button type="button" className="font-semibold text-neutral-600" disabled>
               Resend code
             </button>
           </p>
@@ -288,12 +306,12 @@ export default function SignUpPage() {
           <button
             type="button"
             onClick={handleVerify}
-            className="mt-lg rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700"
+            className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700"
           >
             Verify email
           </button>
         </>
       ) : null}
-    </MobileShell>
+    </AuthLayout>
   )
 }

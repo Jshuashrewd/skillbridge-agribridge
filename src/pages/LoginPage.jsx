@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import MobileShell from '../components/MobileShell'
+import AuthLayout from '../components/AuthLayout'
 import { useAuth } from '../context/AuthContext'
 
 function readableAuthError(error) {
@@ -13,6 +13,9 @@ function readableAuthError(error) {
   if (code.includes('popup-closed-by-user')) return ''
   return 'Something went wrong. Please try again.'
 }
+
+const inputClass =
+  'rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
 
 export default function LoginPage() {
   const { user, logIn, continueWithGoogle } = useAuth()
@@ -55,10 +58,12 @@ export default function LoginPage() {
   }
 
   return (
-    <MobileShell className="justify-center px-md py-2xl">
-      <div className="mb-xl text-center">
-        <p className="text-h2 text-green-700">SkillBridge</p>
-        <h1 className="mt-lg text-h1 text-neutral-950">Welcome back!</h1>
+    <AuthLayout
+      headline="Same passion. Bigger possibilities."
+      subtext="Log in to continue your learning journey or manage your courses."
+    >
+      <div className="mb-lg text-center">
+        <h1 className="text-h2 text-neutral-950">Welcome back!</h1>
         <p className="mt-2xs text-body text-neutral-600">Log in to your account.</p>
       </div>
 
@@ -66,7 +71,7 @@ export default function LoginPage() {
         type="button"
         onClick={handleGoogle}
         disabled={submitting}
-        className="flex items-center justify-center gap-2xs rounded-md border border-green-600 py-sm text-body font-semibold text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
+        className="focus-ring flex min-h-11 w-full items-center justify-center gap-2xs rounded-md border border-green-600 py-sm text-body font-semibold text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
       >
         <span className="font-bold">G</span> Continue with Google
       </button>
@@ -87,7 +92,7 @@ export default function LoginPage() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="you@example.com"
-            className="rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none focus:border-green-600"
+            className={inputClass}
           />
         </label>
 
@@ -100,7 +105,7 @@ export default function LoginPage() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="••••••••"
-            className="rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none focus:border-green-600"
+            className={inputClass}
           />
         </label>
 
@@ -111,7 +116,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
+          className="focus-ring min-h-11 rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
         >
           {submitting ? 'Please wait…' : 'Log in'}
         </button>
@@ -119,10 +124,13 @@ export default function LoginPage() {
 
       <p className="mt-md text-center text-caption text-neutral-600">
         Don't have an account?{' '}
-        <Link to="/signup" className="font-semibold text-green-700">
+        <Link
+          to="/signup"
+          className="focus-ring rounded-sm font-semibold text-green-700 hover:text-green-800 hover:underline"
+        >
           Sign up
         </Link>
       </p>
-    </MobileShell>
+    </AuthLayout>
   )
 }

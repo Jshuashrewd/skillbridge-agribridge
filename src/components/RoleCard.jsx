@@ -3,8 +3,10 @@ export default function RoleCard({ icon, title, description, selected, onSelect 
     <button
       type="button"
       onClick={onSelect}
-      className={`flex w-full items-start gap-sm rounded-lg border p-sm text-left transition-colors ${
-        selected ? 'border-green-600 bg-green-100' : 'border-neutral-200 bg-neutral-50'
+      className={`focus-ring flex w-full items-start gap-sm rounded-lg border p-sm text-left transition-colors ${
+        selected
+          ? 'border-green-600 bg-green-100'
+          : 'border-neutral-200 bg-neutral-50 hover:border-neutral-600 hover:bg-neutral-100'
       }`}
     >
       <span

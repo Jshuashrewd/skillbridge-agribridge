@@ -36,7 +36,14 @@
   --radius-screen: 20px;
   --radius-full: 999px;
 
-  /* Spacing */
+  /* Spacing — use for gap, padding, and margin utilities.
+     NOTE: these key names (sm, md, lg, xl, 2xl, 3xl) collide with
+     Tailwind's built-in named max-width scale, which resolves against
+     this same spacing namespace once a matching key exists here. Never
+     use bare max-w-sm, max-w-md, etc in this repo, use an explicit
+     pixel value instead, or it will silently resolve to a spacing
+     value (max-w-md became 16px, not a usable container width). Plain
+     width, height, gap, and padding utilities are unaffected. */
   --spacing-2xs: 4px;
   --spacing-xs: 8px;
   --spacing-sm: 12px;
@@ -69,4 +76,27 @@ body {
 
 #root {
   min-height: 100svh;
+}
+
+@layer utilities {
+  /* Visible keyboard-focus indicator for every interactive element */
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2;
+  }
+
+  /* Guarantees a >=44px hit area on small controls (chips, icon buttons) */
+  .tap-target {
+    @apply inline-flex min-h-11 min-w-11 items-center justify-center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

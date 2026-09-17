@@ -15,7 +15,7 @@ export default function SignUpStepper({ current }) {
         return (
           <span key={step.key} className="flex items-center gap-2xs">
             <span
-              className={`flex h-5 w-5 items-center justify-center rounded-full border text-[10px] ${
+              className={`flex h-6 w-6 items-center justify-center rounded-full border text-caption ${
                 done
                   ? 'border-green-600 bg-green-600 text-white'
                   : active
