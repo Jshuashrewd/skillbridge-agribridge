@@ -69,12 +69,14 @@ more than one.
 
 ## `users/{userId}`
 
-Doc id = Firebase Auth UID. Created on first sign-in (email or anonymous).
+Doc id = Firebase Auth UID. Created on first sign-in (email/password or Google).
 
 | Field | Type | Notes |
 |---|---|---|
-| `email` | string \| null | `null` for anonymous users |
-| `isAnonymous` | boolean | |
+| `email` | string \| null | |
+| `displayName` | string \| null | |
+| `isAnonymous` | boolean | Always `false` now — anonymous/guest sign-in was removed when the sign-up flow was rebuilt to match the design (Learner/Tutor role picker requires a real account) |
+| `role` | string \| null | `"learner"` \| `"tutor"` \| `null` until the "Tell us about you" step is completed. Only `"learner"` is functional this phase — selecting Tutor shows a "coming soon" message and does not set this field |
 | `streakCount` | number | Placeholder, defaults to `0` — not wired up yet |
 | `badges` | array\<string\> | Placeholder, defaults to `[]` — not wired up yet |
 | `createdAt` | timestamp | |

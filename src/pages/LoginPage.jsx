@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import MobileShell from '../components/MobileShell'
 import { useAuth } from '../context/AuthContext'
 
@@ -8,20 +8,14 @@ function readableAuthError(error) {
   if (code.includes('wrong-password') || code.includes('invalid-credential')) {
     return 'Incorrect email or password.'
   }
-  if (code.includes('email-already-in-use')) {
-    return 'That email is already registered with a different password.'
-  }
-  if (code.includes('weak-password')) {
-    return 'Password should be at least 6 characters.'
-  }
-  if (code.includes('invalid-email')) {
-    return 'Please enter a valid email address.'
-  }
+  if (code.includes('user-not-found')) return 'No account found with that email.'
+  if (code.includes('invalid-email')) return 'Please enter a valid email address.'
+  if (code.includes('popup-closed-by-user')) return ''
   return 'Something went wrong. Please try again.'
 }
 
-export default function SignInPage() {
-  const { user, continueWithEmail, continueAsGuest } = useAuth()
+export default function LoginPage() {
+  const { user, logIn, continueWithGoogle } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -29,7 +23,7 @@ export default function SignInPage() {
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if (user) navigate('/learn', { replace: true })
+    if (user) navigate('/discover', { replace: true })
   }, [user, navigate])
 
   async function handleSubmit(event) {
@@ -37,8 +31,8 @@ export default function SignInPage() {
     setError('')
     setSubmitting(true)
     try {
-      await continueWithEmail(email.trim(), password)
-      navigate('/learn', { replace: true })
+      await logIn(email.trim(), password)
+      navigate('/discover', { replace: true })
     } catch (err) {
       setError(readableAuthError(err))
     } finally {
@@ -46,14 +40,15 @@ export default function SignInPage() {
     }
   }
 
-  async function handleGuest() {
+  async function handleGoogle() {
     setError('')
     setSubmitting(true)
     try {
-      await continueAsGuest()
-      navigate('/learn', { replace: true })
+      const { role } = await continueWithGoogle()
+      navigate(role ? '/discover' : '/signup', { replace: true })
     } catch (err) {
-      setError(readableAuthError(err))
+      const message = readableAuthError(err)
+      if (message) setError(message)
     } finally {
       setSubmitting(false)
     }
@@ -63,8 +58,23 @@ export default function SignInPage() {
     <MobileShell className="justify-center px-md py-2xl">
       <div className="mb-xl text-center">
         <p className="text-h2 text-green-700">SkillBridge</p>
-        <h1 className="mt-lg text-h1 text-neutral-950">Welcome back</h1>
-        <p className="mt-2xs text-body text-neutral-600">Sign in to continue your learning.</p>
+        <h1 className="mt-lg text-h1 text-neutral-950">Welcome back!</h1>
+        <p className="mt-2xs text-body text-neutral-600">Log in to your account.</p>
+      </div>
+
+      <button
+        type="button"
+        onClick={handleGoogle}
+        disabled={submitting}
+        className="flex items-center justify-center gap-2xs rounded-md border border-green-600 py-sm text-body font-semibold text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
+      >
+        <span className="font-bold">G</span> Continue with Google
+      </button>
+
+      <div className="my-md flex items-center gap-sm text-caption text-neutral-600">
+        <span className="h-px flex-1 bg-neutral-200" />
+        or
+        <span className="h-px flex-1 bg-neutral-200" />
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-md">
@@ -86,7 +96,6 @@ export default function SignInPage() {
           <input
             type="password"
             required
-            minLength={6}
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -104,28 +113,15 @@ export default function SignInPage() {
           disabled={submitting}
           className="rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
         >
-          {submitting ? 'Please wait…' : 'Continue'}
+          {submitting ? 'Please wait…' : 'Log in'}
         </button>
       </form>
 
-      <div className="my-lg flex items-center gap-sm text-caption text-neutral-600">
-        <span className="h-px flex-1 bg-neutral-200" />
-        or
-        <span className="h-px flex-1 bg-neutral-200" />
-      </div>
-
-      <button
-        type="button"
-        onClick={handleGuest}
-        disabled={submitting}
-        className="rounded-md border border-neutral-200 py-sm text-body font-semibold text-neutral-950 transition-colors hover:bg-neutral-100 disabled:opacity-60"
-      >
-        Continue as Guest
-      </button>
-
       <p className="mt-md text-center text-caption text-neutral-600">
-        New here? Just enter an email and password above — your account is created
-        automatically.
+        Don't have an account?{' '}
+        <Link to="/signup" className="font-semibold text-green-700">
+          Sign up
+        </Link>
       </p>
     </MobileShell>
   )
