@@ -1,14 +1,13 @@
 // Seeds Firestore with the SkillBridge curriculum: one fully-built course
 // (201, Smartphone Essentials) plus 8 "coming soon" placeholders.
 //
-// Requires a Firebase project configured in .env (see .env.example) and
-// Firestore rules that allow authenticated writes to `courses` (see
-// docs/firestore-schema.md). Run with:
+// Requires a Firebase project configured in .env (see .env.example) with
+// Firestore created in test mode (or rules that allow unauthenticated
+// writes to `courses` — this script does not sign in). Run with:
 //
 //   node --env-file=.env scripts/seed.mjs
 
 import { initializeApp } from 'firebase/app'
-import { getAuth, signInAnonymously } from 'firebase/auth'
 import { doc, getFirestore, serverTimestamp, setDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -31,7 +30,6 @@ if (missing.length) {
 }
 
 const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
 const db = getFirestore(app)
 
 // Track 2 / Course 201 — the one fully-built course this phase.
@@ -213,8 +211,6 @@ const COURSES = [
 ]
 
 async function run() {
-  await signInAnonymously(auth)
-
   for (const { lessons, ...course } of COURSES) {
     await setDoc(doc(db, 'courses', course.id), {
       ...course,
