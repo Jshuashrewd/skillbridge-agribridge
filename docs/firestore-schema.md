@@ -21,6 +21,11 @@ render from this collection alone, without reading subcollections.
 | `order` | number | Sort key (curriculum course number as int, e.g. `201`) |
 | `lessonCount` | number | Denormalized count of lessons |
 | `coverImageUrl` | string \| null | Storage URL; `null` for placeholders |
+| `price` | number \| undefined | Naira. Only set on enrollable (`"published"`) courses |
+| `compareAtPrice` | number \| undefined | Pre-discount price shown struck through; only set alongside `price` |
+| `learningOutcomes` | array\<string\> \| undefined | "What you'll learn" bullets on Course Detail; derived from real lesson content, not filler |
+| `includes` | array\<string\> \| undefined | "This course includes" bullets on Course Detail |
+| `instructorName` / `instructorTitle` / `instructorBio` | string \| undefined | Shown in the Course Detail instructor block. No individual instructor exists for the core curriculum yet, so this is attributed to `"SkillBridge Curriculum Team"` rather than a fabricated person — update when real tutor-authored courses exist |
 | `createdAt` / `updatedAt` | timestamp | |
 
 Doc id convention: `course-{code}` (e.g. `course-201`).
@@ -93,6 +98,22 @@ Subcollection, one doc per course the user has started.
 | `lastLessonId` | string \| null | For "continue where you left off" |
 | `startedAt` / `completedAt` / `updatedAt` | timestamp \| null | |
 
+## `users/{userId}/enrollments/{courseId}`
+
+Subcollection, one doc per course the user has paid for (doc id = `courseId`,
+so a user can't double-enroll in the same course). Written by the checkout
+flow on "payment" success — the payment itself is UI-only (no real gateway;
+any payment method/button press succeeds).
+
+| Field | Type | Notes |
+|---|---|---|
+| `courseId` | string | Back-reference |
+| `courseTitle` | string | Denormalized for display without an extra read |
+| `price` | number | Amount "paid", in Naira |
+| `paymentMethod` | string | `"card"` \| `"bank_transfer"` \| `"ussd"` |
+| `status` | string | `"active"` |
+| `enrolledAt` | timestamp | |
+
 ## Firestore security rules (for this prototype week)
 
 Not enforced yet. Suggested minimal rule for the demo period — any signed-in
@@ -118,6 +139,9 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
       match /progress/{courseId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      match /enrollments/{courseId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }

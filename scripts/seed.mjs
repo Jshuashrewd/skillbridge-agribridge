@@ -141,6 +141,25 @@ const COURSES = [
     status: 'published',
     order: 201,
     coverImageUrl: null,
+    price: 5000,
+    compareAtPrice: 8000,
+    learningOutcomes: [
+      'Navigate your smartphone settings, storage, and connectivity with confidence',
+      'Make calls, send SMS, and complete a mobile money transfer safely',
+      'Communicate professionally over WhatsApp and email',
+      'Recognize common phishing and scam messages and protect your personal information',
+    ],
+    includes: [
+      '4 on-demand lessons',
+      'Practical, real-world walkthroughs',
+      'Certificate of completion',
+      'Lifetime access',
+    ],
+    instructorName: 'SkillBridge Curriculum Team',
+    instructorTitle: 'Digital Literacy Program',
+    instructorBio:
+      'Course content developed by the SkillBridge Digital Literacy program for ' +
+      'youth and ag-entrepreneurs across the curriculum.',
     lessons: smartphoneEssentialsLessons,
   },
   {

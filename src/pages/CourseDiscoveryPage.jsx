@@ -1,5 +1,6 @@
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AppShell from '../components/AppShell'
 import CourseRow from '../components/discovery/CourseRow'
 import SearchResultCard from '../components/discovery/SearchResultCard'
@@ -26,6 +27,7 @@ function CategoryChip({ label, active, onClick }) {
 
 export default function CourseDiscoveryPage() {
   const showToast = useToast()
+  const navigate = useNavigate()
   const [allCourses, setAllCourses] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('all')
@@ -81,7 +83,7 @@ export default function CourseDiscoveryPage() {
     if (course.status === 'coming_soon') {
       showToast(`${course.title} is coming soon.`)
     } else {
-      showToast('The course player is coming in the next phase.')
+      navigate(`/course/${course.id}`)
     }
   }
 

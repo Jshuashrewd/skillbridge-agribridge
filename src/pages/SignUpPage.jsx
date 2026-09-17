@@ -2,9 +2,15 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/AuthLayout'
 import RoleCard from '../components/RoleCard'
-import SignUpStepper from '../components/SignUpStepper'
+import Stepper from '../components/Stepper'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
+
+const SIGNUP_STEPS = [
+  { key: 'create', label: 'Create account' },
+  { key: 'role', label: 'Tell us' },
+  { key: 'verify', label: 'Verify' },
+]
 
 const PASSWORD_RULES = [
   { key: 'len', label: 'At least 8 characters', test: (pw) => pw.length >= 8 },
@@ -115,7 +121,7 @@ export default function SignUpPage() {
 
   return (
     <AuthLayout headline={STEP_CONTENT[step].headline} subtext={STEP_CONTENT[step].subtext}>
-      <SignUpStepper current={step} />
+      <Stepper steps={SIGNUP_STEPS} current={step} />
 
       {step === 'create' ? (
         <>

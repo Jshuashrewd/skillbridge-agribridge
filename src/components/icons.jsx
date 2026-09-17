@@ -84,3 +84,48 @@ export function LogOutIcon(props) {
     </svg>
   )
 }
+
+export function CreditCardIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <path d="M2 10h20" />
+    </svg>
+  )
+}
+
+export function BankIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M3 10 12 4l9 6" />
+      <path d="M5 10v9M9 10v9M15 10v9M19 10v9" />
+      <path d="M3 19h18" />
+    </svg>
+  )
+}
+
+export function PhoneIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="6" y="2" width="12" height="20" rx="2" />
+      <path d="M11 18h2" />
+    </svg>
+  )
+}
+
+export function CheckCircleIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="m8 12 3 3 5-6" />
+    </svg>
+  )
+}
+
+export function ChevronLeftIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m15 6-6 6 6 6" />
+    </svg>
+  )
+}
