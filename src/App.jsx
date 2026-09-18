@@ -3,10 +3,12 @@ import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './context/ToastContext'
 import CertificatePage from './pages/CertificatePage'
+import CertificatesListPage from './pages/CertificatesListPage'
 import CheckoutPage from './pages/CheckoutPage'
 import CourseDetailPage from './pages/CourseDetailPage'
 import CourseDiscoveryPage from './pages/CourseDiscoveryPage'
 import CoursePlayerPage from './pages/CoursePlayerPage'
+import LearnerHubPage from './pages/LearnerHubPage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import VerifyCertificatePage from './pages/VerifyCertificatePage'
@@ -65,6 +67,22 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <CertificatePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/learner"
+              element={
+                <ProtectedRoute>
+                  <LearnerHubPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/learner/certificates"
+              element={
+                <ProtectedRoute>
+                  <CertificatesListPage />
                 </ProtectedRoute>
               }
             />

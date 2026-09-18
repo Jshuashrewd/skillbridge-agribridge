@@ -139,10 +139,11 @@ any payment method/button press succeeds).
 
 ## Firestore security rules (for this prototype week)
 
-Not enforced yet. Suggested minimal rule for the demo period — any signed-in
-user (including anonymous) can read/write their own data and read courses;
-only writes to `courses`/`lessons` are left open too so the seed script can
-run without a service account:
+Live at `firestore.rules` in the repo root (deployed via `firebase deploy`
+or `firebase deploy --only firestore:rules`) — this is the same content
+below, kept in sync manually. Any signed-in user can read/write their own
+data and read courses; only writes to `courses`/`lessons` are left open too
+so the seed script can run without a service account:
 
 ```
 rules_version = '2';

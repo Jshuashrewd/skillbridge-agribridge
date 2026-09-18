@@ -6,9 +6,9 @@ import { AwardIcon, BookIcon, BookmarkIcon, HomeIcon, LogOutIcon } from './icons
 
 const NAV_ITEMS = [
   { key: 'discover', label: 'Discover', icon: HomeIcon, to: '/discover' },
-  { key: 'learning', label: 'My Learning', icon: BookIcon },
+  { key: 'learning', label: 'My Learning', icon: BookIcon, to: '/learner' },
   { key: 'saved', label: 'Saved', icon: BookmarkIcon },
-  { key: 'certificates', label: 'Certificates', icon: AwardIcon },
+  { key: 'certificates', label: 'Certificates', icon: AwardIcon, to: '/learner/certificates' },
 ]
 
 function initialsFor(user) {

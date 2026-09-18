@@ -191,6 +191,15 @@ export default function CertificatePage() {
             /verify/{certificate.certId}
           </Link>
         </p>
+
+        <div className="mt-md text-center">
+          <Link
+            to="/learner/certificates"
+            className="focus-ring rounded-sm text-body font-semibold text-green-700 hover:underline"
+          >
+            Go to my certificates
+          </Link>
+        </div>
       </div>
     </AppShell>
   )

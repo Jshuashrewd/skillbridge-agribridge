@@ -7,7 +7,6 @@ import PaymentMethodOption from '../components/checkout/PaymentMethodOption'
 import { BankIcon, CheckCircleIcon, ChevronLeftIcon, CreditCardIcon, PhoneIcon } from '../components/icons'
 import Stepper from '../components/Stepper'
 import { useAuth } from '../context/AuthContext'
-import { useToast } from '../context/ToastContext'
 import { db } from '../lib/firebase'
 import { formatNaira } from '../lib/format'
 
@@ -30,7 +29,6 @@ export default function CheckoutPage() {
   const { courseId } = useParams()
   const { user } = useAuth()
   const navigate = useNavigate()
-  const showToast = useToast()
 
   const [course, setCourse] = useState(undefined)
   const [step, setStep] = useState('checkout')
@@ -74,8 +72,7 @@ export default function CheckoutPage() {
   }
 
   function handleGoToMyLearning() {
-    showToast('My Learning is coming soon.')
-    navigate('/discover')
+    navigate('/learner')
   }
 
   if (course === undefined) {
