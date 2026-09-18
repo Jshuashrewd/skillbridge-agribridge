@@ -2,12 +2,14 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import { ToastProvider } from './context/ToastContext'
+import CertificatePage from './pages/CertificatePage'
 import CheckoutPage from './pages/CheckoutPage'
 import CourseDetailPage from './pages/CourseDetailPage'
 import CourseDiscoveryPage from './pages/CourseDiscoveryPage'
-import CoursePlayerPlaceholderPage from './pages/CoursePlayerPlaceholderPage'
+import CoursePlayerPage from './pages/CoursePlayerPage'
 import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
+import VerifyCertificatePage from './pages/VerifyCertificatePage'
 
 export default function App() {
   return (
@@ -17,6 +19,7 @@ export default function App() {
           <Routes>
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/verify/:certId" element={<VerifyCertificatePage />} />
             <Route
               path="/discover"
               element={
@@ -45,7 +48,23 @@ export default function App() {
               path="/course/:courseId/learn"
               element={
                 <ProtectedRoute>
-                  <CoursePlayerPlaceholderPage />
+                  <CoursePlayerPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/course/:courseId/learn/:lessonId"
+              element={
+                <ProtectedRoute>
+                  <CoursePlayerPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/course/:courseId/certificate"
+              element={
+                <ProtectedRoute>
+                  <CertificatePage />
                 </ProtectedRoute>
               }
             />

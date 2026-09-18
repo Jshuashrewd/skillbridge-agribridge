@@ -1,8 +1,7 @@
-# SkillBridge Firestore Schema (Phase 1)
+# SkillBridge Firestore Schema
 
-Covers courses, lessons, quizzes, and user progress for the Learn Hub prototype.
-Quizzes are modeled here but not seeded/used yet (course player + quizzes are
-next phase, per the task brief).
+Covers courses, lessons, quizzes, user progress, and certificates for the
+Course Player prototype.
 
 ## `courses/{courseId}`
 
@@ -49,28 +48,27 @@ Subcollection, one document per lesson.
 | Field | Type | Notes |
 |---|---|---|
 | `courseId` | string | Redundant back-reference, useful for `collectionGroup` queries |
-| `order` | number | Position within the course, 1-indexed |
+| `order` | number | Position within the course, 1-indexed. The course player unlocks lesson `n` once lesson `n-1` is completed |
+| `module` | string | Curriculum sidebar section heading, e.g. `"Phone Basics"` |
+| `moduleOrder` | number | Sort key for modules |
 | `title` | string | |
 | `type` | string | `"video"` \| `"audio"` \| `"text"` |
-| `mediaUrl` | string \| null | Storage URL; `null` until real media is uploaded |
+| `mediaUrl` | string \| null | Storage URL; `null` until real media is uploaded — the player shows a static placeholder in that case, it doesn't fake playback |
 | `durationSeconds` | number | |
-| `content` | string | Lesson body/transcript — real text is seeded even where `mediaUrl` is null |
+| `content` | string | Lesson body/transcript, shown on the Overview tab |
+| `objectives` | array\<string\> | "What you'll learn in this lesson" checklist on the Overview tab |
+| `quiz.questions` | array\<object\> | Knowledge-check questions: `{ id, prompt, choices: string[], correctIndex: number }`. Embedded directly on the lesson doc rather than a subcollection — each lesson has exactly one knowledge check in this prototype, and it's always read together with the lesson |
 | `createdAt` / `updatedAt` | timestamp | |
 
 Doc id convention: `lesson-{n}` (1-indexed within the course).
 
-## `courses/{courseId}/lessons/{lessonId}/quizzes/{quizId}`
+### Knowledge-check mechanics (Course Player)
 
-Subcollection (modeled now, **not seeded this phase**). One knowledge-check
-per lesson in practice, but kept as a collection in case a lesson ever needs
-more than one.
-
-| Field | Type | Notes |
-|---|---|---|
-| `lessonId` | string | Back-reference |
-| `passScore` | number | Minimum correct answers to pass |
-| `questions` | array\<object\> | `{ id, prompt, choices: string[], correctIndex: number }` |
-| `createdAt` / `updatedAt` | timestamp | |
+A lesson's quiz has no separate "pass score" — every question must be
+answered correctly at least once to complete the lesson. Wrong answers show
+inline feedback and can be retried immediately, with no lockout or penalty.
+Completing the last lesson's quiz marks the course `completed` and mints a
+certificate (see below).
 
 ## `users/{userId}`
 
@@ -88,15 +86,40 @@ Doc id = Firebase Auth UID. Created on first sign-in (email/password or Google).
 
 ## `users/{userId}/progress/{courseId}`
 
-Subcollection, one doc per course the user has started.
+Subcollection, one doc per course the user has started. Created on first
+visit to the Course Player (`touchProgress`), updated when a lesson's
+knowledge check is passed (`completeLesson`) — see `src/lib/progress.js`.
 
 | Field | Type | Notes |
 |---|---|---|
 | `courseId` | string | Back-reference |
-| `status` | string | `"not_started"` \| `"in_progress"` \| `"completed"` |
-| `completedLessonIds` | array\<string\> | |
-| `lastLessonId` | string \| null | For "continue where you left off" |
+| `status` | string | `"in_progress"` \| `"completed"` |
+| `completedLessonIds` | array\<string\> | Lesson ids whose knowledge check has been passed |
+| `lastLessonId` | string \| null | Last lesson viewed; also used to resume `/course/:courseId/learn` |
+| `certificateId` | string \| null | Set once, the first time `completedLessonIds.length` reaches the lesson count — see `certificates` below |
 | `startedAt` / `completedAt` / `updatedAt` | timestamp \| null | |
+
+## `certificates/{certId}`
+
+Top-level collection, one doc per certificate issued. Publicly readable so
+`/verify/:certId` works without authentication. Written once per
+course-completion by `src/lib/certificate.js` (`issueCertificate`), which is
+idempotent — it checks `progress.certificateId` first rather than minting a
+duplicate on repeat visits.
+
+| Field | Type | Notes |
+|---|---|---|
+| `certId` | string | Doc id, format `SB-{courseCode}-{8-char id}`, e.g. `SB-201-4F2A9C1B` |
+| `userId` | string | Firebase Auth UID of the learner |
+| `userName` | string | Denormalized display name (or email if no display name) at time of issue |
+| `courseId` / `courseTitle` | string | Denormalized |
+| `issuedAt` | timestamp | |
+
+The Certificate page (`/course/:courseId/certificate`) renders this as a
+downloadable card (PNG via `html2canvas`, PDF via `jspdf`) with a QR code
+(via the `qrcode` package) encoding the `/verify/:certId` URL. Verification
+itself is a placeholder — it's a direct client read of this collection, no
+separate verification backend.
 
 ## `users/{userId}/enrollments/{courseId}`
 
@@ -131,9 +154,6 @@ service cloud.firestore {
       match /lessons/{lessonId} {
         allow read: if true;
         allow write: if request.auth != null;
-        match /quizzes/{quizId} {
-          allow read, write: if request.auth != null;
-        }
       }
     }
     match /users/{userId} {
@@ -144,6 +164,10 @@ service cloud.firestore {
       match /enrollments/{courseId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+    }
+    match /certificates/{certId} {
+      allow read: if true; // powers the public /verify/:certId page
+      allow create: if request.auth != null;
     }
   }
 }
