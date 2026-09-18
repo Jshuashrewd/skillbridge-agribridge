@@ -1,6 +1,6 @@
 # SkillBridge — Live Demo Script
 
-Live URL: **`<PASTE YOUR DEPLOYED URL HERE AFTER RUNNING `npm run build && npx firebase-tools deploy`>`**
+Live URL: **https://skillbridge-agribridge.web.app**
 
 Two ways to demo, depending on how much time you have.
 
