@@ -197,17 +197,17 @@ export default function CheckoutPage() {
                           />
                         </label>
                         <div className="flex gap-sm">
-                          <label className="flex flex-1 flex-col gap-2xs">
+                          <label className="flex min-w-0 flex-1 flex-col gap-2xs">
                             <span className="text-caption text-neutral-600">Expiry date</span>
                             <input
                               type="text"
                               placeholder="MM/YY"
                               value={expiry}
                               onChange={(event) => setExpiry(event.target.value)}
-                              className={inputClass}
+                              className={`${inputClass} w-full`}
                             />
                           </label>
-                          <label className="flex flex-1 flex-col gap-2xs">
+                          <label className="flex min-w-0 flex-1 flex-col gap-2xs">
                             <span className="text-caption text-neutral-600">CVV</span>
                             <input
                               type="text"
@@ -215,7 +215,7 @@ export default function CheckoutPage() {
                               placeholder="123"
                               value={cvv}
                               onChange={(event) => setCvv(event.target.value)}
-                              className={inputClass}
+                              className={`${inputClass} w-full`}
                             />
                           </label>
                         </div>

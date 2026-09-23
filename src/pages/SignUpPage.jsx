@@ -159,7 +159,7 @@ export default function SignUpPage() {
 
           <form onSubmit={handleCreateAccount} className="flex flex-col gap-md">
             <div className="flex flex-col gap-md sm:flex-row sm:gap-sm">
-              <label className="flex flex-1 flex-col gap-2xs">
+              <label className="flex min-w-0 flex-1 flex-col gap-2xs">
                 <span className="text-sm text-neutral-950">First name</span>
                 <input
                   type="text"
@@ -167,10 +167,10 @@ export default function SignUpPage() {
                   value={firstName}
                   onChange={(event) => setFirstName(event.target.value)}
                   placeholder="e.g. John"
-                  className={inputClass}
+                  className={`${inputClass} w-full`}
                 />
               </label>
-              <label className="flex flex-1 flex-col gap-2xs">
+              <label className="flex min-w-0 flex-1 flex-col gap-2xs">
                 <span className="text-sm text-neutral-950">Last name</span>
                 <input
                   type="text"
@@ -178,7 +178,7 @@ export default function SignUpPage() {
                   value={lastName}
                   onChange={(event) => setLastName(event.target.value)}
                   placeholder="e.g. Doe"
-                  className={inputClass}
+                  className={`${inputClass} w-full`}
                 />
               </label>
             </div>
