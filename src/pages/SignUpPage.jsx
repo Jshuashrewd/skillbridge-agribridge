@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/AuthLayout'
+import { CheckCircleIcon, CloseIcon, EyeIcon, EyeOffIcon } from '../components/icons'
 import RoleCard from '../components/RoleCard'
 import Stepper from '../components/Stepper'
 import { useAuth } from '../context/AuthContext'
@@ -35,8 +36,10 @@ const STEP_CONTENT = {
   },
 }
 
+const RESEND_SECONDS = 45
+
 const inputClass =
-  'rounded-md border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
 
 function readableAuthError(error) {
   const code = error?.code ?? ''
@@ -57,13 +60,22 @@ export default function SignUpPage() {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [role, setRole] = useState('learner')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [resendSeconds, setResendSeconds] = useState(RESEND_SECONDS)
 
   const passwordChecks = PASSWORD_RULES.map((rule) => ({ ...rule, met: rule.test(password) }))
   const passwordValid = passwordChecks.every((rule) => rule.met)
   const createValid = firstName.trim() && lastName.trim() && email.trim() && passwordValid
+
+  useEffect(() => {
+    if (step !== 'verify' || resendSeconds <= 0) return
+    const timer = setInterval(() => setResendSeconds((seconds) => seconds - 1), 1000)
+    return () => clearInterval(timer)
+  }, [step, resendSeconds])
 
   async function handleCreateAccount(event) {
     event.preventDefault()
@@ -116,6 +128,10 @@ export default function SignUpPage() {
 
   function handleVerify() {
     // No real email is sent for this prototype — any click completes verification.
+    setShowSuccessModal(true)
+  }
+
+  function goToDashboard() {
     navigate('/discover', { replace: true })
   }
 
@@ -126,7 +142,7 @@ export default function SignUpPage() {
       {step === 'create' ? (
         <>
           <div className="mt-lg mb-lg">
-            <h1 className="text-h2 text-neutral-950">Create your account</h1>
+            <h1 className="text-h3 text-neutral-950">Create your account</h1>
             <p className="mt-2xs text-body text-neutral-600">Get started with SkillBridge today.</p>
           </div>
 
@@ -134,21 +150,17 @@ export default function SignUpPage() {
             type="button"
             onClick={handleGoogle}
             disabled={submitting}
-            className="focus-ring flex min-h-11 w-full items-center justify-center gap-2xs rounded-md border border-green-600 py-sm text-body font-semibold text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
+            className="focus-ring flex min-h-11 w-full items-center justify-center gap-2xs rounded-md border border-green-700 py-sm text-body text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
           >
             <span className="font-bold">G</span> Continue with Google
           </button>
 
-          <div className="my-md flex items-center gap-sm text-caption text-neutral-600">
-            <span className="h-px flex-1 bg-neutral-200" />
-            or sign up with email
-            <span className="h-px flex-1 bg-neutral-200" />
-          </div>
+          <p className="my-md text-center text-sm text-neutral-600">— or sign up with email —</p>
 
           <form onSubmit={handleCreateAccount} className="flex flex-col gap-md">
             <div className="flex flex-col gap-md sm:flex-row sm:gap-sm">
               <label className="flex flex-1 flex-col gap-2xs">
-                <span className="text-caption text-neutral-600">First name</span>
+                <span className="text-sm text-neutral-950">First name</span>
                 <input
                   type="text"
                   required
@@ -159,7 +171,7 @@ export default function SignUpPage() {
                 />
               </label>
               <label className="flex flex-1 flex-col gap-2xs">
-                <span className="text-caption text-neutral-600">Last name</span>
+                <span className="text-sm text-neutral-950">Last name</span>
                 <input
                   type="text"
                   required
@@ -172,7 +184,7 @@ export default function SignUpPage() {
             </div>
 
             <label className="flex flex-col gap-2xs">
-              <span className="text-caption text-neutral-600">Email address</span>
+              <span className="text-sm text-neutral-950">Email address</span>
               <input
                 type="email"
                 required
@@ -185,16 +197,26 @@ export default function SignUpPage() {
             </label>
 
             <label className="flex flex-col gap-2xs">
-              <span className="text-caption text-neutral-600">Password</span>
-              <input
-                type="password"
-                required
-                autoComplete="new-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="••••••••"
-                className={inputClass}
-              />
+              <span className="text-sm text-neutral-950">Password</span>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  autoComplete="new-password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="••••••••"
+                  className={`${inputClass} w-full pr-10`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((value) => !value)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="focus-ring absolute inset-y-0 right-0 flex w-10 items-center justify-center text-neutral-600 hover:text-neutral-950"
+                >
+                  {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+                </button>
+              </div>
             </label>
 
             <div className="flex flex-wrap gap-x-sm gap-y-2xs text-caption">
@@ -212,13 +234,13 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={!createValid || submitting}
-              className="focus-ring min-h-11 rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-50"
+              className="focus-ring min-h-11 rounded-md bg-green-700 py-sm text-body text-white transition-colors hover:bg-green-900 disabled:opacity-50"
             >
               {submitting ? 'Please wait…' : 'Create account'}
             </button>
           </form>
 
-          <p className="mt-md text-center text-caption text-neutral-600">
+          <p className="mt-md text-center text-sm text-neutral-600">
             Already have an account?{' '}
             <Link
               to="/login"
@@ -233,7 +255,7 @@ export default function SignUpPage() {
       {step === 'role' ? (
         <>
           <div className="mt-lg mb-lg">
-            <h1 className="text-h2 text-neutral-950">Tell us about you</h1>
+            <h1 className="text-h3 text-neutral-950">Tell us about you</h1>
             <p className="mt-2xs text-body text-neutral-600">What brings you to SkillBridge?</p>
           </div>
 
@@ -262,14 +284,14 @@ export default function SignUpPage() {
             type="button"
             onClick={handleRoleContinue}
             disabled={submitting}
-            className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700 disabled:opacity-60"
+            className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-700 py-sm text-body text-white transition-colors hover:bg-green-900 disabled:opacity-60"
           >
             Continue
           </button>
           <button
             type="button"
             onClick={() => setStep('create')}
-            className="focus-ring mt-sm flex min-h-11 w-full items-center justify-center rounded-md text-body font-semibold text-green-700 transition-colors hover:bg-green-100"
+            className="focus-ring mt-sm flex min-h-11 w-full items-center justify-center rounded-md text-sm text-green-700 transition-colors hover:bg-green-100"
           >
             Back
           </button>
@@ -279,7 +301,7 @@ export default function SignUpPage() {
       {step === 'verify' ? (
         <>
           <div className="mt-lg mb-lg">
-            <h1 className="text-h2 text-neutral-950">Verify your email</h1>
+            <h1 className="text-h3 text-neutral-950">Verify your email</h1>
             <p className="mt-2xs text-body text-neutral-600">
               We've sent a 6-digit code to {user?.email ?? 'your email'}
             </p>
@@ -293,30 +315,68 @@ export default function SignUpPage() {
                 inputMode="numeric"
                 maxLength={1}
                 aria-label={`Verification code digit ${index + 1}`}
-                className={`h-12 w-11 rounded-md border border-neutral-200 bg-neutral-50 text-center text-h1 text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20`}
+                className="h-[52px] w-[52px] rounded-sm border border-neutral-200 bg-neutral-50 text-center text-h1 text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20"
               />
             ))}
           </div>
 
-          <p className="mt-sm text-center text-caption text-neutral-600">
+          <p className="mt-sm text-center text-sm text-neutral-600">
             Didn't receive the code?{' '}
-            <button type="button" className="font-semibold text-neutral-600" disabled>
-              Resend code
-            </button>
+            {resendSeconds > 0 ? (
+              <span>Resend code ({String(Math.floor(resendSeconds / 60)).padStart(2, '0')}:{String(resendSeconds % 60).padStart(2, '0')})</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setResendSeconds(RESEND_SECONDS)}
+                className="focus-ring rounded-sm font-semibold text-green-700 hover:underline"
+              >
+                Resend code
+              </button>
+            )}
           </p>
 
-          <p className="mt-lg rounded-md bg-green-100 px-sm py-sm text-caption text-green-700">
+          <p className="mt-lg rounded-md bg-green-100 px-sm py-sm text-sm text-neutral-600">
             Verifying your email helps keep your account secure and is required to take courses.
           </p>
 
           <button
             type="button"
             onClick={handleVerify}
-            className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-600 py-sm text-body font-semibold text-white transition-colors hover:bg-green-700"
+            className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-700 py-sm text-body text-white transition-colors hover:bg-green-900"
           >
             Verify email
           </button>
         </>
+      ) : null}
+
+      {showSuccessModal ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#202522]/68 px-md">
+          <div className="w-full max-w-[400px] rounded-lg bg-white p-lg shadow-xl">
+            <div className="flex items-start justify-between">
+              <CheckCircleIcon className="h-12 w-12 text-green-700" />
+              <button
+                type="button"
+                onClick={goToDashboard}
+                aria-label="Close"
+                className="focus-ring rounded-sm text-neutral-600 hover:text-neutral-950"
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+            </div>
+            <h2 className="mt-md text-[18px] font-medium text-neutral-950">Account created successfully!</h2>
+            <p className="mt-2xs text-sm text-neutral-600">
+              Your SkillBridge account is ready. Continue to your dashboard to start setting up your learning
+              experience.
+            </p>
+            <button
+              type="button"
+              onClick={goToDashboard}
+              className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-700 py-sm text-body text-white transition-colors hover:bg-green-900"
+            >
+              Go to dashboard
+            </button>
+          </div>
+        </div>
       ) : null}
     </AuthLayout>
   )

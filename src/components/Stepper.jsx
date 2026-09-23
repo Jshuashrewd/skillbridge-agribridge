@@ -2,22 +2,19 @@ export default function Stepper({ steps, current }) {
   const currentIndex = steps.findIndex((step) => step.key === current)
 
   return (
-    <div className="flex flex-wrap items-center gap-xs text-caption text-neutral-600">
+    <div className="flex flex-wrap items-center gap-md text-caption text-neutral-600">
       {steps.map((step, index) => {
-        const done = index < currentIndex
         const active = index === currentIndex
         return (
           <span key={step.key} className="flex items-center gap-2xs">
-            <span
-              className={`flex h-6 w-6 items-center justify-center rounded-full border text-caption ${
-                done || active
-                  ? 'border-green-600 bg-green-600 text-white'
-                  : 'border-neutral-200 text-neutral-600'
-              }`}
-            >
-              {done ? '✓' : index + 1}
-            </span>
-            <span className={active ? 'font-semibold text-neutral-950' : ''}>{step.label}</span>
+            {active ? (
+              <span className="h-2 w-2 shrink-0 rounded-full bg-green-700" />
+            ) : (
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-neutral-200 text-[9px] leading-none">
+                {index + 1}
+              </span>
+            )}
+            <span>{step.label}</span>
           </span>
         )
       })}
