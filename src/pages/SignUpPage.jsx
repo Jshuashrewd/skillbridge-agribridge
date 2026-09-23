@@ -39,7 +39,8 @@ const STEP_CONTENT = {
 const RESEND_SECONDS = 45
 
 const inputClass =
-  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-sm text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+const passwordInputClass = inputClass.replace('text-sm', 'text-body')
 
 function readableAuthError(error) {
   const code = error?.code ?? ''
@@ -152,7 +153,7 @@ export default function SignUpPage() {
             disabled={submitting}
             className="focus-ring flex min-h-11 w-full items-center justify-center gap-2xs rounded-md border border-green-700 py-sm text-body text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
           >
-            <span className="font-bold">G</span> Continue with Google
+            G Continue with Google
           </button>
 
           <p className="my-md text-center text-sm text-neutral-600">— or sign up with email —</p>
@@ -206,7 +207,7 @@ export default function SignUpPage() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
-                  className={`${inputClass} w-full pr-10`}
+                  className={`${passwordInputClass} w-full pr-10`}
                 />
                 <button
                   type="button"
@@ -315,7 +316,7 @@ export default function SignUpPage() {
                 inputMode="numeric"
                 maxLength={1}
                 aria-label={`Verification code digit ${index + 1}`}
-                className="h-[52px] w-[52px] rounded-sm border border-neutral-200 bg-neutral-50 text-center text-h1 text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20"
+                className="aspect-square w-full min-w-0 max-w-[52px] flex-1 rounded-sm border border-neutral-200 bg-neutral-50 text-center text-h1 text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20"
               />
             ))}
           </div>
@@ -351,7 +352,7 @@ export default function SignUpPage() {
 
       {showSuccessModal ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#202522]/68 px-md">
-          <div className="w-full max-w-[400px] rounded-lg bg-white p-lg shadow-xl">
+          <div className="w-full max-w-[400px] rounded-[16px] bg-white p-lg shadow-xl">
             <div className="flex items-start justify-between">
               <CheckCircleIcon className="h-12 w-12 text-green-700" />
               <button

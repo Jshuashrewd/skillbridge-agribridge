@@ -4,7 +4,7 @@ import AuthLayout from '../components/AuthLayout'
 import { useToast } from '../context/ToastContext'
 
 const inputClass =
-  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-sm text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
 
 export default function ForgotPasswordPage() {
   const navigate = useNavigate()

@@ -21,6 +21,8 @@ const PASSWORD_RULES = [
 
 const inputClass =
   'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+// This screen only has a password-type field, which Figma sizes at 16px (unlike the
+// 14px used for plain text/email fields elsewhere in this flow), so the base stays text-body.
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate()

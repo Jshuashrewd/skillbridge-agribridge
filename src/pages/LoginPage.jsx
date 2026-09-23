@@ -16,7 +16,8 @@ function readableAuthError(error) {
 }
 
 const inputClass =
-  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-body text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+  'rounded-sm border border-neutral-200 bg-neutral-50 px-sm py-sm text-sm text-neutral-950 outline-none transition-colors hover:border-neutral-600 focus:border-green-600 focus:ring-2 focus:ring-green-600/20'
+const passwordInputClass = inputClass.replace('text-sm', 'text-body')
 
 export default function LoginPage() {
   const { user, logIn, continueWithGoogle } = useAuth()
@@ -77,7 +78,7 @@ export default function LoginPage() {
         disabled={submitting}
         className="focus-ring flex min-h-11 w-full items-center justify-center gap-2xs rounded-md border border-green-700 py-sm text-body text-green-700 transition-colors hover:bg-green-100 disabled:opacity-60"
       >
-        <span className="font-bold">G</span> Continue with Google
+        G Continue with Google
       </button>
 
       <p className="my-md text-center text-sm text-neutral-600">— or —</p>
@@ -106,7 +107,7 @@ export default function LoginPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="••••••••"
-              className={`${inputClass} w-full pr-10`}
+              className={`${passwordInputClass} w-full pr-10`}
             />
             <button
               type="button"
