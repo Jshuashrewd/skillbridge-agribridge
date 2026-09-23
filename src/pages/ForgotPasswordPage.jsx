@@ -26,6 +26,7 @@ export default function ForgotPasswordPage() {
       headline="Join a global community of learners and creators"
       subtext="Gain practical skills, advance your career, or share your expertise."
       onBack={() => navigate(-1)}
+      hero="recovery"
     >
       <div className="mb-lg text-center">
         <h1 className="text-h3 text-neutral-950">Forgot your password?</h1>

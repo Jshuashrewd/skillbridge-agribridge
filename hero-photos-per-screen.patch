@@ -1,0 +1,70 @@
+diff --git a/src/components/AuthLayout.jsx b/src/components/AuthLayout.jsx
+index 24d2886..386f765 100644
+--- a/src/components/AuthLayout.jsx
++++ b/src/components/AuthLayout.jsx
+@@ -1,12 +1,26 @@
+ import { ChevronLeftIcon } from './icons'
+ 
+-export default function AuthLayout({ headline, subtext, onBack, children }) {
++// Figma uses three different hero photos across the Access & Account flow:
++// - 'signup'   → Sign Up, Tell Us About You, Verify Email (a 3-photo composite)
++// - 'login'    → Log In (a single, different photo)
++// - 'recovery' → Forgot Password, Reset Password (a single, different photo again)
++// Export each from Figma and save at the paths below (see README note).
++const HERO_IMAGES = {
++  signup: '/images/auth/hero-signup.png',
++  login: '/images/auth/hero-login.png',
++  recovery: '/images/auth/hero-recovery.png',
++}
++
++export default function AuthLayout({ headline, subtext, onBack, hero = 'signup', children }) {
+   return (
+     <div className="min-h-svh bg-neutral-100 lg:flex">
+       {/* Brand panel — Figma places this on the left (node 126:58666, x=0 of a 1440px frame). */}
+       <div className="relative hidden shrink-0 flex-col justify-between overflow-hidden bg-green-900 px-2xl py-2xl text-neutral-50 lg:flex lg:w-1/2">
+-        {/* Hero photo — export from Figma and save as public/images/auth/hero.png (see README note). */}
+-        <div aria-hidden className="absolute inset-0 bg-cover bg-center bg-[url('/images/auth/hero.png')]" />
++        <div
++          aria-hidden
++          className="absolute inset-0 bg-cover bg-center"
++          style={{ backgroundImage: `url('${HERO_IMAGES[hero]}')` }}
++        />
+         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-green-900/[0.16] to-[#031a13]" />
+         <p className="relative text-h2">SkillBridge</p>
+         <div className="relative max-w-[420px]">
+diff --git a/src/pages/ForgotPasswordPage.jsx b/src/pages/ForgotPasswordPage.jsx
+index ae62a17..fe64664 100644
+--- a/src/pages/ForgotPasswordPage.jsx
++++ b/src/pages/ForgotPasswordPage.jsx
+@@ -26,6 +26,7 @@ export default function ForgotPasswordPage() {
+       headline="Join a global community of learners and creators"
+       subtext="Gain practical skills, advance your career, or share your expertise."
+       onBack={() => navigate(-1)}
++      hero="recovery"
+     >
+       <div className="mb-lg text-center">
+         <h1 className="text-h3 text-neutral-950">Forgot your password?</h1>
+diff --git a/src/pages/LoginPage.jsx b/src/pages/LoginPage.jsx
+index df52b04..fb0a002 100644
+--- a/src/pages/LoginPage.jsx
++++ b/src/pages/LoginPage.jsx
+@@ -64,6 +64,7 @@ export default function LoginPage() {
+       headline="Same passion. Bigger possibilities."
+       subtext="Log in to continue your learning journey or manage your courses."
+       onBack={() => navigate(-1)}
++      hero="login"
+     >
+       <div className="mb-lg text-center">
+         <h1 className="text-h3 text-neutral-950">Welcome back!</h1>
+diff --git a/src/pages/ResetPasswordPage.jsx b/src/pages/ResetPasswordPage.jsx
+index 74e70f3..eac05ab 100644
+--- a/src/pages/ResetPasswordPage.jsx
++++ b/src/pages/ResetPasswordPage.jsx
+@@ -46,6 +46,7 @@ export default function ResetPasswordPage() {
+       headline="Reset and get back on track"
+       subtext="Create a new password and get back to learning confidently."
+       onBack={() => navigate(-1)}
++      hero="recovery"
+     >
+       <div className="mb-lg text-center">
+         <div className="mb-md flex justify-center">

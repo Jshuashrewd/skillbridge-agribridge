@@ -46,6 +46,7 @@ export default function ResetPasswordPage() {
       headline="Reset and get back on track"
       subtext="Create a new password and get back to learning confidently."
       onBack={() => navigate(-1)}
+      hero="recovery"
     >
       <div className="mb-lg text-center">
         <div className="mb-md flex justify-center">

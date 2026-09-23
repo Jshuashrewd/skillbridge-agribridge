@@ -64,6 +64,7 @@ export default function LoginPage() {
       headline="Same passion. Bigger possibilities."
       subtext="Log in to continue your learning journey or manage your courses."
       onBack={() => navigate(-1)}
+      hero="login"
     >
       <div className="mb-lg text-center">
         <h1 className="text-h3 text-neutral-950">Welcome back!</h1>
