@@ -132,8 +132,8 @@ export default function SignUpPage() {
     setShowSuccessModal(true)
   }
 
-  function goToDashboard() {
-    navigate('/discover', { replace: true })
+  function goToOnboarding() {
+    navigate('/onboarding', { replace: true })
   }
 
   return (
@@ -357,7 +357,7 @@ export default function SignUpPage() {
               <CheckCircleIcon className="h-12 w-12 text-green-700" />
               <button
                 type="button"
-                onClick={goToDashboard}
+                onClick={goToOnboarding}
                 aria-label="Close"
                 className="focus-ring rounded-sm text-neutral-600 hover:text-neutral-950"
               >
@@ -371,7 +371,7 @@ export default function SignUpPage() {
             </p>
             <button
               type="button"
-              onClick={goToDashboard}
+              onClick={goToOnboarding}
               className="focus-ring mt-lg min-h-11 w-full rounded-md bg-green-700 py-sm text-body text-white transition-colors hover:bg-green-900"
             >
               Go to dashboard

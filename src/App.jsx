@@ -11,6 +11,7 @@ import CoursePlayerPage from './pages/CoursePlayerPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import LearnerHubPage from './pages/LearnerHubPage'
 import LoginPage from './pages/LoginPage'
+import OnboardingPage from './pages/OnboardingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import SignUpPage from './pages/SignUpPage'
 import VerifyCertificatePage from './pages/VerifyCertificatePage'
@@ -26,6 +27,14 @@ export default function App() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/verify/:certId" element={<VerifyCertificatePage />} />
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <OnboardingPage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/discover"
               element={
