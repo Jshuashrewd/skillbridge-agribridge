@@ -10,36 +10,45 @@ render from this collection alone, without reading subcollections.
 
 | Field | Type | Notes |
 |---|---|---|
-| `code` | string | Curriculum course number, e.g. `"201"` |
-| `track` | string | `"track-1"` \| `"track-2"` \| `"track-3"` |
-| `trackTitle` | string | e.g. `"Digital Literacy & Applied Tech Skills for Youth"` |
-| `category` | string | One of the 4 Learn Hub filter keys (see below) |
-| `title` | string | e.g. `"Smartphone Essentials & Digital Communication"` |
+| `code` | string | Catalog course number, e.g. `"101"` |
+| `category` | string | One of the Course Discovery filter keys (see below) |
+| `title` | string | e.g. `"UI/UX Design Fundamentals"` |
 | `description` | string | Short course summary |
 | `status` | string | `"published"` \| `"coming_soon"` |
-| `order` | number | Sort key (curriculum course number as int, e.g. `201`) |
+| `order` | number | Sort key (catalog course number as int, e.g. `101`) |
 | `lessonCount` | number | Denormalized count of lessons |
 | `coverImageUrl` | string \| null | Storage URL; `null` for placeholders |
 | `price` | number \| undefined | Naira. Only set on enrollable (`"published"`) courses |
 | `compareAtPrice` | number \| undefined | Pre-discount price shown struck through; only set alongside `price` |
+| `rating` | number \| undefined | Shown as `★ rating` on discovery cards and Course Detail |
+| `reviewCount` | number \| undefined | e.g. `324` → "4.8 (324 reviews)" on Course Detail; only set on the one course with real reviews context |
+| `learnerCount` | number \| undefined | Shown as "N learners" on discovery cards |
+| `level` | string \| undefined | e.g. `"Beginner"`; shown on Course Detail |
 | `learningOutcomes` | array\<string\> \| undefined | "What you'll learn" bullets on Course Detail; derived from real lesson content, not filler |
 | `includes` | array\<string\> \| undefined | "This course includes" bullets on Course Detail |
-| `instructorName` / `instructorTitle` / `instructorBio` | string \| undefined | Shown in the Course Detail instructor block. No individual instructor exists for the core curriculum yet, so this is attributed to `"SkillBridge Curriculum Team"` rather than a fabricated person — update when real tutor-authored courses exist |
+| `instructorName` / `instructorTitle` / `instructorBio` | string \| undefined | Shown in the Course Detail instructor block |
 | `createdAt` / `updatedAt` | timestamp | |
 
-Doc id convention: `course-{code}` (e.g. `course-201`).
+Doc id convention: `course-{code}` (e.g. `course-101`).
 
-### Category mapping (assumption — flag if wrong)
+### Category mapping
 
-The spec's 4 Learn Hub categories don't line up 1:1 with the 3 curriculum
-tracks, so Track 3 is split by topic:
+Matches the filter chips on the Figma Course Discovery screen (node 79:608),
+extended with two categories (`business`, `technology`) since several of
+that screen's own course cards (Product Management, Digital Marketing, Web
+Development, Data Analysis, AI Tools) don't fit any of Figma's 5 shown
+chips (UI/UX Design, Graphic Design, 3D & Animation, Photography, Branding —
+Figma's mockup itself has no course under the latter 3):
 
 | Category key | Label | Courses |
 |---|---|---|
-| `ag-tech-skills` | Ag-Tech Skills | 101, 102, 103 (Track 1) |
-| `digital-tech-literacy` | Digital & Tech Literacy | 201, 202, 203 (Track 2) |
-| `financial-inclusion` | Financial Inclusion | 301 (Budgeting, Cash Flow & Micro-Credit) |
-| `youth-entrepreneurship` | Youth Entrepreneurship | 302 (Digital Marketing), 303 (Grant Pitching) |
+| `ui-ux-design` | UI/UX Design | 101 (UI/UX Design Fundamentals), 102 (Figma for Product Designers) |
+| `graphic-design` | Graphic Design | none yet |
+| `3d-animation` | 3D & Animation | none yet |
+| `photography` | Photography | none yet |
+| `branding` | Branding | none yet |
+| `business` | Business & Marketing | 103 (Product Management), 104 (Digital Marketing), 107 (Effective Communication) |
+| `technology` | Technology | 105 (Web Development), 106 (Data Analysis), 108 (AI Tools) |
 
 ## `courses/{courseId}/lessons/{lessonId}`
 

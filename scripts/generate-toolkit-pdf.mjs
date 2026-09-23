@@ -99,7 +99,7 @@ doc.setFont('helvetica', 'italic')
 doc.setFontSize(9)
 doc.setTextColor(NEUTRAL_600)
 doc.text(
-  'Part of the SkillBridge Digital Literacy curriculum — Smartphone Essentials & Digital Communication (Course 201).',
+  'Part of the SkillBridge curriculum — UI/UX Design Fundamentals (Course 101), Lesson 2.',
   margin,
   y,
 )

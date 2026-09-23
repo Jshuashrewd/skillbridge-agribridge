@@ -22,8 +22,7 @@ called out explicitly in the product copy itself, so nothing looks broken.
 3. **Email verification** — this screen is a deliberate no-op for the demo:
    click **Verify email** to continue (no real email is sent).
 4. **Browse** — you land on **Discover**. Point out the search bar and
-   category filter chips. Click into **Smartphone Essentials & Digital
-   Communication**.
+   category filter chips. Click into **UI/UX Design Fundamentals**.
 5. **Course Detail** — scroll to show "What you'll learn," the lesson list,
    and the instructor block. Click **Enroll now**.
 6. **Checkout** — pick any payment method (**Bank Transfer** has no fields

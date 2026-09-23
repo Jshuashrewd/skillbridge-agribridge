@@ -199,6 +199,25 @@ export function EyeOffIcon(props) {
   )
 }
 
+export function StarIcon(props) {
+  return (
+    <svg {...base} fill="currentColor" stroke="none" {...props}>
+      <path d="M12 2.5l2.9 6.14 6.6.72-4.9 4.62 1.28 6.52L12 17.35l-5.88 3.15 1.28-6.52-4.9-4.62 6.6-.72L12 2.5Z" />
+    </svg>
+  )
+}
+
+export function UsersIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5" />
+      <path d="M16 4.5c1.8.3 3.2 1.9 3.2 3.8s-1.4 3.5-3.2 3.8" />
+      <path d="M18.5 13.7c2.4.6 4 2.9 4 5.3" />
+    </svg>
+  )
+}
+
 export function XCircleIcon(props) {
   return (
     <svg {...base} {...props}>

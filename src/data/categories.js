@@ -1,8 +1,12 @@
-// Mirrors the 4 Learn Hub category filters from the SkillBridge integration
-// spec. Course → category mapping is documented in docs/firestore-schema.md.
+// Mirrors the category filter chips shown on the Figma Course Discovery
+// screen (node 79:608). Course → category mapping is documented in
+// docs/firestore-schema.md.
 export const CATEGORIES = [
-  { key: 'ag-tech-skills', label: 'Ag-Tech Skills' },
-  { key: 'digital-tech-literacy', label: 'Digital & Tech Literacy' },
-  { key: 'financial-inclusion', label: 'Financial Inclusion' },
-  { key: 'youth-entrepreneurship', label: 'Youth Entrepreneurship' },
+  { key: 'ui-ux-design', label: 'UI/UX Design' },
+  { key: 'graphic-design', label: 'Graphic Design' },
+  { key: '3d-animation', label: '3D & Animation' },
+  { key: 'photography', label: 'Photography' },
+  { key: 'branding', label: 'Branding' },
+  { key: 'business', label: 'Business & Marketing' },
+  { key: 'technology', label: 'Technology' },
 ]

@@ -14,10 +14,10 @@ function CategoryChip({ label, active, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className={`focus-ring tap-target shrink-0 rounded-full border px-sm text-caption font-semibold transition-colors ${
+      className={`focus-ring flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] border px-md text-caption transition-colors ${
         active
-          ? 'border-green-600 bg-green-600 text-white'
-          : 'border-neutral-200 bg-neutral-50 text-neutral-600 hover:border-neutral-600 hover:text-neutral-950'
+          ? 'border-green-700 bg-green-700 text-white'
+          : 'border-neutral-200 bg-neutral-50 text-neutral-950 hover:border-neutral-600'
       }`}
     >
       {label}
@@ -114,11 +114,31 @@ export default function CourseDiscoveryPage() {
           </div>
         ) : (
           <>
-            <div className="mt-md rounded-lg bg-green-900 px-md py-lg text-neutral-50 lg:px-xl">
-              <h1 className="text-h2">Gain in-demand skills for a brighter future</h1>
-              <p className="mt-2xs max-w-[420px] text-body text-green-100">
-                Practical courses for ag-tech, digital literacy, and entrepreneurship.
-              </p>
+            <div className="relative mt-md overflow-hidden rounded-lg bg-green-900 px-md py-lg text-neutral-50 lg:px-xl lg:py-2xl">
+              {/* Hero photo — export from Figma (node 79:637 "Hero") and save as public/images/discovery/hero.png */}
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: "url('/images/discovery/hero.png')" }}
+              />
+              <div aria-hidden className="absolute inset-0 bg-green-900/45" />
+              <div className="relative">
+                <p className="text-[10px] font-semibold uppercase leading-[14px] tracking-[1.2px] text-green-100">
+                  Learn today. Build tomorrow.
+                </p>
+                <h1 className="mt-sm text-h3 lg:max-w-[580px]">Gain in-demand skills for a brighter future</h1>
+                <p className="mt-2xs max-w-[570px] text-body text-green-100">
+                  Explore thousands of expert-led courses and take the next step in your career,
+                  business, or personal growth.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('popular-courses')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="focus-ring mt-lg min-h-11 rounded-md bg-green-700 px-lg py-sm text-body text-white transition-colors hover:bg-green-800"
+                >
+                  Explore courses →
+                </button>
+              </div>
             </div>
 
             <nav
@@ -145,11 +165,9 @@ export default function CourseDiscoveryPage() {
                 <p className="py-xl text-center text-body text-neutral-600">Loading courses…</p>
               ) : (
                 <>
-                  <CourseRow
-                    title="Popular courses"
-                    courses={courses}
-                    onSelectCourse={handleSelectCourse}
-                  />
+                  <div id="popular-courses">
+                    <CourseRow title="Popular courses" courses={courses} onSelectCourse={handleSelectCourse} />
+                  </div>
                   <CourseRow
                     title="Recommended for you"
                     courses={recommended}
@@ -159,6 +177,7 @@ export default function CourseDiscoveryPage() {
                     title="Trending courses"
                     courses={trending}
                     onSelectCourse={handleSelectCourse}
+                    variant="trending"
                   />
                 </>
               )}

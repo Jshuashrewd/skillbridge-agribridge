@@ -1,36 +1,56 @@
-import { CATEGORIES } from '../../data/categories'
+import { BookmarkIcon, StarIcon, UsersIcon } from '../icons'
+import { formatNaira } from '../../lib/format'
+
+function learnerCountLabel(count) {
+  if (!count) return null
+  if (count >= 1000) return `${(count / 1000).toFixed(1).replace(/\.0$/, '')}k learners`
+  return `${count} learners`
+}
 
 export default function DiscoveryCourseCard({ course, onSelect }) {
   const isComingSoon = course.status === 'coming_soon'
-  const categoryLabel = CATEGORIES.find((category) => category.key === course.category)?.label
+  const learnerLabel = learnerCountLabel(course.learnerCount)
 
   return (
     <button
       type="button"
       onClick={() => onSelect?.(course)}
-      className={`focus-ring flex w-40 shrink-0 flex-col overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 text-left transition-colors hover:border-green-600 sm:w-44 lg:w-48 ${
-        isComingSoon ? 'opacity-80' : ''
-      }`}
+      className="focus-ring flex w-[220px] shrink-0 flex-col overflow-hidden rounded-md bg-neutral-50 text-left transition-opacity hover:opacity-90 sm:w-[250px] lg:w-[270px]"
     >
-      <div className="flex h-24 items-center justify-center bg-green-100 text-h1 text-green-700">
-        {course.code}
+      <div className="relative flex h-[140px] items-end justify-end rounded-sm bg-gradient-to-br from-green-700 to-green-900 p-xs">
+        {isComingSoon ? (
+          <span className="rounded-sm bg-amber-100 px-xs py-2xs text-caption font-semibold text-amber-700">
+            Coming soon
+          </span>
+        ) : (
+          <span className="rounded-sm bg-green-600 px-xs py-2xs text-caption text-white">4h 20m</span>
+        )}
       </div>
-      <div className="flex flex-1 flex-col gap-2xs p-sm">
-        <p className="line-clamp-2 text-body font-semibold leading-snug text-neutral-950 break-words">
-          {course.title}
-        </p>
-        <p className="text-caption text-neutral-600">{categoryLabel}</p>
-        <div className="mt-auto pt-xs">
-          {isComingSoon ? (
-            <span className="inline-block rounded-full bg-amber-100 px-xs py-2xs text-caption font-semibold text-amber-700">
-              Coming Soon
-            </span>
-          ) : (
-            <span className="inline-block rounded-full bg-green-600 px-sm py-2xs text-caption font-semibold text-white">
-              Start
-            </span>
-          )}
+      <div className="flex flex-col gap-sm py-sm">
+        <div>
+          <p className="truncate text-[16px] font-medium text-neutral-950">{course.title}</p>
+          <p className="truncate text-caption text-neutral-600">{course.instructorName ?? 'SkillBridge'}</p>
         </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-sm">
+            {course.rating ? (
+              <span className="flex items-center gap-2xs text-caption text-amber-700">
+                <StarIcon className="h-[14px] w-[14px]" />
+                {course.rating}
+              </span>
+            ) : null}
+            {learnerLabel ? (
+              <span className="flex items-center gap-2xs text-caption text-neutral-600">
+                <UsersIcon className="h-[14px] w-[14px]" />
+                {learnerLabel}
+              </span>
+            ) : null}
+          </div>
+          <BookmarkIcon className="h-5 w-5 text-neutral-600" />
+        </div>
+        {course.price ? (
+          <p className="text-[18px] font-medium text-green-700">{formatNaira(course.price)}</p>
+        ) : null}
       </div>
     </button>
   )
