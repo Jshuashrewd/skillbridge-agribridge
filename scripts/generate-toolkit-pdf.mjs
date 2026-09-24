@@ -1,6 +1,6 @@
 // Generates the one real Toolkits resource: a practical one-pager derived
-// directly from Lesson 2 (Calls, SMS & Mobile Money Basics) and Lesson 4
-// (Staying Safe Online) of Course 201 — not filler/lorem ipsum. Run with:
+// directly from Lesson 3 (The Design Process) and Lesson 5 (Wireframing in
+// Practice) of course-101 — not filler/lorem ipsum. Run with:
 //
 //   node scripts/generate-toolkit-pdf.mjs
 
@@ -62,34 +62,35 @@ doc.text('SkillBridge', margin, 40)
 doc.setFont('helvetica', 'normal')
 doc.setFontSize(11)
 doc.setTextColor('#cbe4d4')
-doc.text('Digital Literacy Toolkit', margin, 62)
+doc.text('UI/UX Design Toolkit', margin, 62)
 
 y = 130
-heading('Mobile Money Safety Checklist')
+heading('Design Process & Wireframing Quick Reference')
 doc.setFont('helvetica', 'normal')
 doc.setFontSize(10.5)
 doc.setTextColor(NEUTRAL_600)
 y += 6
-doc.text('A quick-reference companion to "Calls, SMS & Mobile Money Basics"', margin, y + 12)
+doc.text('A quick-reference companion to "The Design Process" and "Wireframing in Practice"', margin, y + 12)
 y += 12
 
-subheading('Before you send money')
-bullet("Confirm the recipient's number is correct — read it back digit by digit before confirming.")
-bullet('Confirm the exact amount on the screen before you enter your PIN.')
-bullet('Know the transaction fee, if any, so the final debit does not surprise you.')
+subheading('The four stages')
+bullet('Discover — research the problem before proposing any solution.')
+bullet('Define — frame the right problem to solve, based on what research turned up.')
+bullet('Develop — explore and prototype multiple possible solutions.')
+bullet('Deliver — test with real users, refine, and ship.')
 
-subheading('USSD basics')
-bullet('USSD codes (like *737#) are short dial codes for mobile money, airtime, and balance checks — confirm the exact code for your own network provider.')
-bullet('Check your balance before and after a transfer to make sure it matches what you expect.')
+subheading('Keep it iterative')
+bullet('Test early, rough ideas with real users instead of polishing in isolation.')
+bullet('Be ready to loop back to Discover or Define if testing reveals a better problem to solve.')
 
-subheading('Red flags — never do these')
-bullet('Never share your mobile money PIN with anyone — including someone claiming to be your bank or network provider.')
-bullet('Be suspicious of unsolicited "you’ve won a prize" messages asking you to reply or send money.')
-bullet('If a message urgently pressures you to act "right now," slow down and verify before doing anything.')
+subheading('Wireframing basics')
+bullet('Start with rough boxes and labels — resist the urge to pick colors or fonts yet.')
+bullet('Focus each wireframe on layout, hierarchy, and flow between screens.')
+bullet('Add just enough detail to communicate the idea to a reviewer or teammate.')
 
-subheading('After the transaction')
-bullet('Save or screenshot the confirmation SMS.')
-bullet('Check that your new balance matches what you expect.')
+subheading('Moving to high fidelity')
+bullet('Validate the layout and flow with a wireframe first.')
+bullet('Only move to color, type, and visual polish once the structure is confirmed.')
 
 y += 30
 doc.setDrawColor('#d8e0dc')
@@ -99,11 +100,11 @@ doc.setFont('helvetica', 'italic')
 doc.setFontSize(9)
 doc.setTextColor(NEUTRAL_600)
 doc.text(
-  'Part of the SkillBridge curriculum — UI/UX Design Fundamentals (Course 101), Lesson 2.',
+  'Part of the SkillBridge curriculum — UI/UX Design Fundamentals (Course 101), Lessons 3 & 5.',
   margin,
   y,
 )
 
-const outPath = join(outDir, 'mobile-money-safety-checklist.pdf')
+const outPath = join(outDir, 'design-process-wireframing-reference.pdf')
 writeFileSync(outPath, Buffer.from(doc.output('arraybuffer')))
 console.log(`✔ Wrote ${outPath}`)

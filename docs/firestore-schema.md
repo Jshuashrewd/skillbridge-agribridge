@@ -58,7 +58,7 @@ Subcollection, one document per lesson.
 |---|---|---|
 | `courseId` | string | Redundant back-reference, useful for `collectionGroup` queries |
 | `order` | number | Position within the course, 1-indexed. The course player unlocks lesson `n` once lesson `n-1` is completed |
-| `module` | string | Curriculum sidebar section heading, e.g. `"Phone Basics"` |
+| `module` | string | Curriculum sidebar section heading, e.g. `"Foundations"` |
 | `moduleOrder` | number | Sort key for modules |
 | `title` | string | |
 | `type` | string | `"video"` \| `"audio"` \| `"text"` |

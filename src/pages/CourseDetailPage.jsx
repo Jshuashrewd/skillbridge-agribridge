@@ -1,20 +1,29 @@
-import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AppShell from '../components/AppShell'
-import { BookmarkIcon, PlayIcon, StarIcon, UsersIcon } from '../components/icons'
+import CoursePreviewModal from '../components/discovery/CoursePreviewModal'
+import { BookmarkIcon, CalendarIcon, GraduationCapIcon, PlayIcon, StarIcon, UsersIcon } from '../components/icons'
 import { CATEGORIES } from '../data/categories'
+import { CATEGORY_GROUPS, groupLabelForCategory } from '../data/categoryGroups'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
 import { db } from '../lib/firebase'
 import { formatDuration, formatNaira } from '../lib/format'
+import { slugifyInstructor } from '../lib/instructor'
 
 const TABS = [
   { key: 'overview', label: 'Overview' },
   { key: 'curriculum', label: 'Curriculum' },
   { key: 'instructor', label: 'Instructor' },
   { key: 'reviews', label: 'Reviews' },
+  { key: 'related', label: 'Related Courses' },
 ]
+
+function formatUpdated(timestamp) {
+  if (!timestamp?.toDate) return null
+  return new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(timestamp.toDate())
+}
 
 export default function CourseDetailPage() {
   const { courseId } = useParams()
@@ -24,8 +33,10 @@ export default function CourseDetailPage() {
 
   const [course, setCourse] = useState(undefined) // undefined = loading, null = not found
   const [lessons, setLessons] = useState([])
+  const [catalog, setCatalog] = useState([])
   const [enrolled, setEnrolled] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
+  const [previewOpen, setPreviewOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -51,6 +62,13 @@ export default function CourseDetailPage() {
   }, [courseId])
 
   useEffect(() => {
+    const coursesQuery = query(collection(db, 'courses'), orderBy('order'))
+    return onSnapshot(coursesQuery, (snapshot) => {
+      setCatalog(snapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() })))
+    })
+  }, [])
+
+  useEffect(() => {
     if (!user) return undefined
     let cancelled = false
     getDoc(doc(db, 'users', user.uid, 'enrollments', courseId)).then((snap) => {
@@ -62,14 +80,38 @@ export default function CourseDetailPage() {
   }, [user, courseId])
 
   const categoryLabel = CATEGORIES.find((category) => category.key === course?.category)?.label
+  const groupLabel = groupLabelForCategory(course?.category) ?? CATEGORY_GROUPS[0].label
+  const updatedLabel = formatUpdated(course?.updatedAt)
+  const relatedCourses = catalog.filter((c) => c.id !== courseId && c.category === course?.category).slice(0, 3)
+
+  function goToInstructor() {
+    if (!course?.instructorName) return
+    navigate(`/instructor/${slugifyInstructor(course.instructorName)}?course=${courseId}`)
+  }
 
   function goToTab(tab) {
     setActiveTab(tab.key)
+    if (tab.key === 'instructor') {
+      goToInstructor()
+      return
+    }
     if (tab.key === 'reviews') {
-      showToast('Reviews are coming soon.')
+      if (course?.instructorName) {
+        navigate(`/instructor/${slugifyInstructor(course.instructorName)}?course=${courseId}#reviews`)
+      } else {
+        showToast('Reviews are coming soon.')
+      }
       return
     }
     document.getElementById(`tab-${tab.key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  function handleSelectRelated(related) {
+    if (related.status === 'coming_soon') {
+      showToast(`${related.title} is coming soon.`)
+    } else {
+      navigate(`/course/${related.id}`)
+    }
   }
 
   if (course === undefined) {
@@ -105,12 +147,12 @@ export default function CourseDetailPage() {
 
   return (
     <AppShell active="discover">
-      <div className="mx-auto w-full max-w-6xl px-md py-md lg:px-xl lg:py-lg">
+      <div className="mx-auto w-full max-w-6xl px-md py-md lg:px-lg lg:py-lg">
         <p className="text-caption text-neutral-600">
-          <Link to="/discover" className="focus-ring rounded-sm text-green-700 hover:underline">
-            Discover
+          <Link to="/home" className="focus-ring rounded-sm hover:text-green-700 hover:underline">
+            Home
           </Link>{' '}
-          › {categoryLabel} › {course.title}
+          › {groupLabel} › {categoryLabel}
         </p>
 
         <div className="mt-sm rounded-md border border-neutral-200 bg-neutral-50 p-md lg:flex lg:items-start lg:gap-xl lg:p-lg">
@@ -133,12 +175,27 @@ export default function CourseDetailPage() {
                     {course.learnerCount.toLocaleString('en-NG')} learners
                   </span>
                 ) : null}
-                {course.level ? <span>{course.level}</span> : null}
+                {course.level ? (
+                  <span className="flex items-center gap-2xs">
+                    <GraduationCapIcon className="h-4 w-4" />
+                    {course.level}
+                  </span>
+                ) : null}
+                {updatedLabel ? (
+                  <span className="flex items-center gap-2xs">
+                    <CalendarIcon className="h-4 w-4" />
+                    Updated {updatedLabel}
+                  </span>
+                ) : null}
               </div>
             </div>
 
             {course.instructorName ? (
-              <div className="mt-lg flex items-center gap-sm">
+              <button
+                type="button"
+                onClick={goToInstructor}
+                className="focus-ring mt-lg flex items-center gap-sm rounded-md text-left"
+              >
                 <span className="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-full bg-neutral-950 text-h1 text-white">
                   {course.instructorName[0]}
                 </span>
@@ -146,25 +203,23 @@ export default function CourseDetailPage() {
                   <p className="text-h1 text-neutral-950">{course.instructorName}</p>
                   <p className="text-caption text-neutral-600">{course.instructorTitle}</p>
                 </div>
-              </div>
+              </button>
             ) : null}
 
-            <div
-              className="relative mt-lg flex h-[220px] items-center justify-center overflow-hidden rounded-md bg-cover bg-center lg:h-[284px]"
+            <button
+              type="button"
+              onClick={() => setPreviewOpen(true)}
+              className="focus-ring relative mt-lg flex h-[220px] w-full items-center justify-center overflow-hidden rounded-md bg-cover bg-center lg:h-[284px]"
               style={{ backgroundImage: "url('/images/discovery/course-card.jpg')" }}
             >
-              <div aria-hidden className="absolute inset-0 bg-green-900/30" />
-              <button
-                type="button"
-                onClick={() => showToast('Video playback is a styled placeholder for this prototype.')}
-                className="focus-ring relative flex flex-col items-center gap-xs"
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-50">
+              <div aria-hidden className="absolute inset-0 bg-green-900/25" />
+              <span className="relative flex flex-col items-center gap-xs">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-50">
                   <PlayIcon className="h-5 w-5 text-green-700" />
                 </span>
                 <span className="text-caption text-white">Preview this course</span>
-              </button>
-            </div>
+              </span>
+            </button>
 
             {/* Price/enroll card shows here on mobile; on desktop it moves to the sidebar */}
             <div className="lg:hidden">
@@ -196,7 +251,7 @@ export default function CourseDetailPage() {
             {course.learningOutcomes?.length ? (
               <section id="tab-overview" className="mt-lg scroll-mt-lg rounded-md border border-neutral-200 bg-neutral-50 p-md">
                 <h2 className="text-h2 text-neutral-950">What you'll learn</h2>
-                <ul className="mt-sm grid gap-xs sm:grid-cols-2">
+                <ul className="mt-sm flex flex-col gap-xs">
                   {course.learningOutcomes.map((outcome) => (
                     <li key={outcome} className="flex items-start gap-2xs text-sm text-neutral-600">
                       <span className="text-green-700">✓</span>
@@ -238,50 +293,63 @@ export default function CourseDetailPage() {
               </section>
             ) : null}
 
-            {course.includes?.length ? (
-              <section className="mt-lg">
-                <h2 className="text-h1 text-neutral-950">This course includes</h2>
-                <ul className="mt-sm grid gap-xs sm:grid-cols-2">
-                  {course.includes.map((item) => (
-                    <li key={item} className="flex items-start gap-2xs text-body text-neutral-950">
-                      <span className="text-green-700">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
-
-            {course.instructorBio ? (
-              <section id="tab-instructor" className="mt-lg scroll-mt-lg">
-                <h2 className="text-h1 text-neutral-950">About the instructor</h2>
-                <div className="mt-sm flex items-start gap-sm rounded-md border border-neutral-200 bg-neutral-50 p-sm">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-neutral-950 text-body text-white">
-                    {course.instructorName[0]}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-body text-neutral-950">{course.instructorName}</p>
-                    <p className="text-caption text-neutral-600">{course.instructorTitle}</p>
-                    <p className="mt-2xs text-body text-neutral-600">{course.instructorBio}</p>
-                  </div>
-                </div>
-              </section>
-            ) : null}
+            <section id="tab-related" className="mt-lg scroll-mt-lg lg:hidden">
+              <RelatedCourses courses={relatedCourses} onSelect={handleSelectRelated} />
+            </section>
           </div>
 
           <div className="mt-lg hidden lg:mt-0 lg:block lg:w-[340px] lg:shrink-0">
-            <div className="sticky top-24">
+            <div className="sticky top-24 flex flex-col gap-lg">
               <PriceCard
                 course={course}
                 enrolled={enrolled}
                 onEnroll={() => navigate(`/course/${courseId}/checkout`)}
                 onContinue={() => navigate(`/course/${courseId}/learn`)}
               />
+              <div id="tab-related">
+                <RelatedCourses courses={relatedCourses} onSelect={handleSelectRelated} />
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {previewOpen ? (
+        <CoursePreviewModal course={course} lessons={lessons} onClose={() => setPreviewOpen(false)} />
+      ) : null}
     </AppShell>
+  )
+}
+
+function RelatedCourses({ courses, onSelect }) {
+  if (!courses.length) return null
+  return (
+    <div className="flex flex-col gap-sm">
+      <h2 className="text-h1 text-neutral-950">Related courses</h2>
+      {courses.map((course) => (
+        <button
+          key={course.id}
+          type="button"
+          onClick={() => onSelect(course)}
+          className="focus-ring flex items-center gap-sm rounded-md text-left"
+        >
+          <div
+            className="h-[76px] w-[108px] shrink-0 rounded-sm bg-cover bg-center"
+            style={{ backgroundImage: "url('/images/discovery/course-card-clean.jpg')" }}
+          />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm text-neutral-950">{course.title}</p>
+            {course.rating ? (
+              <p className="mt-2xs text-caption text-amber-700">★ {course.rating}</p>
+            ) : (
+              <p className="mt-2xs text-caption text-amber-700">Coming soon</p>
+            )}
+            {course.price ? <p className="mt-2xs text-sm font-medium text-green-700">{formatNaira(course.price)}</p> : null}
+          </div>
+          <BookmarkIcon className="h-5 w-5 shrink-0 text-neutral-600" />
+        </button>
+      ))}
+    </div>
   )
 }
 
@@ -296,7 +364,7 @@ function PriceCard({ course, enrolled, onEnroll, onContinue }) {
     <div className="mt-lg rounded-md border border-neutral-200 bg-neutral-50 p-md lg:mt-0">
       <div
         className="h-[178px] w-full rounded-md bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/discovery/course-card.jpg')" }}
+        style={{ backgroundImage: "url('/images/discovery/course-card-clean.jpg')" }}
       />
       {enrolled ? (
         <>
@@ -334,12 +402,13 @@ function PriceCard({ course, enrolled, onEnroll, onContinue }) {
           </button>
         </>
       )}
-      <ul className="mt-md flex flex-col gap-sm text-caption text-neutral-600">
-        <li>✓ 30-day money-back guarantee</li>
-        <li>✓ Full lifetime access</li>
-        <li>✓ Access on all devices</li>
-        <li>✓ Certificate of completion</li>
-      </ul>
+      {course.includes?.length ? (
+        <ul className="mt-md flex flex-col gap-sm text-caption text-neutral-600">
+          {course.includes.map((item) => (
+            <li key={item}>✓ {item}</li>
+          ))}
+        </ul>
+      ) : null}
     </div>
   )
 }

@@ -1,9 +1,8 @@
 // Seeds Firestore with the SkillBridge catalog shown in the Figma Course
 // Discovery design (node 79:608): one fully-built course (course-101, UI/UX
-// Design Fundamentals — its lessons are the original "Smartphone Essentials"
-// content, kept as-is since Figma only specifies catalog-level fields, not
-// lesson bodies) plus 7 "coming soon" placeholders matching the other course
-// cards shown on that screen.
+// Design Fundamentals — lesson titles, order, and durations match the
+// Course Preview modal, node 81:727) plus 7 "coming soon" placeholders
+// matching the other course cards shown on that screen.
 //
 // Requires a Firebase project configured in .env (see .env.example) with
 // Firestore created in test mode (or rules that allow unauthenticated
@@ -36,58 +35,48 @@ if (missing.length) {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
-// Track 2 / Course 201 — the one fully-built course this phase.
-const smartphoneEssentialsLessons = [
+// The one fully-built course this phase (course-101, UI/UX Design
+// Fundamentals). Lesson titles, order, and durations match the Course
+// Preview modal in the Figma file (node 81:727) exactly.
+const uiUxFundamentalsLessons = [
   {
     id: 'lesson-1',
     order: 1,
-    module: 'Phone Basics',
+    module: 'Foundations',
     moduleOrder: 1,
-    title: 'Getting to Know Your Smartphone',
+    title: 'Course Introduction',
     type: 'video',
     mediaUrl: null,
-    durationSeconds: 360,
+    durationSeconds: 150,
     content:
-      'Learn the parts of your smartphone that matter most day to day: home screen ' +
-      'and app icons, storage and clearing space, battery care, and connecting to ' +
-      'Wi-Fi or mobile data. By the end of this lesson you should be able to check ' +
-      'your storage, connect to a new Wi-Fi network, and know which settings menu ' +
-      'to use when something needs adjusting.',
+      "A quick tour of what this course covers and how it's structured: you'll move " +
+      'from foundational UX/UI concepts through user research and into hands-on ' +
+      "wireframing, finishing with a portfolio-ready project. Each lesson pairs a " +
+      'short video with a knowledge check, and unlocks the next lesson once you pass it.',
     objectives: [
-      "Check how much storage you have free",
-      'Connect to a new Wi-Fi network',
-      'Know which settings menu to use for common adjustments',
-      "Care for your phone's battery day to day",
+      "Understand what you'll build by the end of this course",
+      'Know how lessons, knowledge checks, and unlocking work',
+      'Identify the four stages the course moves through',
     ],
     quiz: {
       questions: [
         {
           id: 'q1',
-          prompt: 'Where would you go to see how much storage space is free on your phone?',
-          choices: ['Settings', 'Camera app', 'Contacts', 'Calculator'],
-          correctIndex: 0,
+          prompt: "What do you need to complete before the next lesson unlocks?",
+          choices: ['Watch the video twice', "Pass the lesson's knowledge check", 'Leave a review', 'Download the course PDF'],
+          correctIndex: 1,
         },
         {
           id: 'q2',
-          prompt: 'What do you need to connect your phone to a new Wi-Fi network?',
-          choices: [
-            "The network's name and password",
-            'Your SIM card PIN',
-            'A USB cable',
-            "The phone's IMEI number",
-          ],
+          prompt: 'What will you have by the end of this course?',
+          choices: ['A completed portfolio-ready project', 'A UX certification exam', 'A Figma subscription', 'A list of design tools only'],
           correctIndex: 0,
         },
         {
           id: 'q3',
-          prompt: "Which of these helps protect your phone's battery over time?",
-          choices: [
-            'Always charging to exactly 100% overnight, every night',
-            'Avoiding extreme heat and very low charge levels',
-            'Using it while charging as much as possible',
-            'Removing the battery when not in use',
-          ],
-          correctIndex: 1,
+          prompt: 'How is each lesson structured?',
+          choices: ['A video followed by a knowledge check', 'A live class only', 'A reading list with no video', 'A group project'],
+          correctIndex: 0,
         },
       ],
     },
@@ -95,57 +84,48 @@ const smartphoneEssentialsLessons = [
   {
     id: 'lesson-2',
     order: 2,
-    module: 'Phone Basics',
+    module: 'Foundations',
     moduleOrder: 1,
-    title: 'Calls, SMS & Mobile Money Basics',
+    title: 'What is UI/UX Design?',
     type: 'video',
     mediaUrl: null,
-    durationSeconds: 420,
+    durationSeconds: 252,
     content:
-      'Covers making and receiving calls, sending SMS, and using USSD codes — the ' +
-      'short dial codes (like *737#) used for mobile money transfers, airtime, and ' +
-      'checking your balance. Includes a walkthrough of a typical mobile money ' +
-      'transfer and what to double-check before confirming a transaction.',
+      'UX (user experience) and UI (user interface) design are related but different ' +
+      'disciplines. UX is concerned with how a product works — the flow, the logic, ' +
+      'whether people can actually get things done. UI is concerned with how a ' +
+      'product looks and feels — layout, color, typography, and the small ' +
+      'interactive details. Good products need both: a well-researched, logical ' +
+      'flow expressed through a clear, consistent visual interface.',
     objectives: [
-      'Make and receive calls and SMS confidently',
-      'Use USSD codes like *737# for mobile money and airtime',
-      'Complete a mobile money transfer step by step',
-      'Know what to double-check before confirming a transaction',
+      'Explain the difference between UX and UI design',
+      'Recognize why a product needs both to succeed',
+      'Identify UX vs UI concerns in a real screen',
     ],
     quiz: {
       questions: [
         {
           id: 'q1',
-          prompt: 'USSD codes like *737# are mainly used for...',
-          choices: [
-            'Downloading apps',
-            'Mobile money, airtime, and balance checks',
-            "Changing your phone's language",
-            'Connecting to Wi-Fi',
-          ],
+          prompt: 'Which best describes UX design?',
+          choices: ['How a product looks visually', 'How a product works and flows for the user', 'The color palette of an app', 'The font used in a logo'],
           correctIndex: 1,
         },
         {
           id: 'q2',
-          prompt: 'Before confirming a mobile money transfer, you should always...',
-          choices: [
-            'Turn off your phone',
-            "Double-check the recipient's number and the amount",
-            'Delete the SMS',
-            'Restart the app',
-          ],
-          correctIndex: 1,
+          prompt: 'Which best describes UI design?',
+          choices: ['The visual layout, color, and typography of a product', 'The backend database structure', "The user's emotional journey only", 'The marketing copy'],
+          correctIndex: 0,
         },
         {
           id: 'q3',
-          prompt: 'Which of these helps make sure a call or SMS goes through correctly?',
+          prompt: 'Why does a product need both UX and UI?',
           choices: [
-            'Confirming you have network signal and the right number',
-            'Using airplane mode',
-            'Clearing your call log first',
-            'Muting notifications',
+            'A logical flow alone always guarantees success',
+            'A beautiful interface can fix a confusing flow',
+            'Users notice looks first and never notice structure',
+            'A confusing flow with a clear interface still frustrates users',
           ],
-          correctIndex: 0,
+          correctIndex: 3,
         },
       ],
     },
@@ -153,57 +133,48 @@ const smartphoneEssentialsLessons = [
   {
     id: 'lesson-3',
     order: 3,
-    module: 'Communication & Safety',
-    moduleOrder: 2,
-    title: 'Messaging & Email for Work',
+    module: 'Foundations',
+    moduleOrder: 1,
+    title: 'The Design Process',
     type: 'video',
     mediaUrl: null,
-    durationSeconds: 400,
+    durationSeconds: 378,
     content:
-      'Introduces WhatsApp for business communication — group etiquette, sharing ' +
-      'photos/documents, and voice notes for low-literacy contexts — alongside the ' +
-      'basics of writing a clear, professional email: subject lines, greetings, and ' +
-      'attachments.',
+      'Professional design work follows a repeatable process, often described as ' +
+      'four stages: Discover (research the problem), Define (frame the right ' +
+      'problem to solve), Develop (explore and prototype solutions), and Deliver ' +
+      '(test, refine, and ship). Designers move through these stages iteratively — ' +
+      'testing early ideas with real users and looping back to earlier stages when ' +
+      'research reveals a better problem to solve.',
     objectives: [
-      'Use WhatsApp groups professionally',
-      'Share photos, documents, and voice notes appropriately',
-      'Write a clear subject line and greeting',
-      'Send an email with an attachment',
+      'Name the four stages of the design process',
+      'Explain why the process is iterative, not linear',
+      'Describe what happens at each stage',
     ],
     quiz: {
       questions: [
         {
           id: 'q1',
-          prompt: 'In a WhatsApp work group, which is the better etiquette?',
-          choices: [
-            'Sending many short one-word messages back to back',
-            "Keeping messages clear and relevant to the group's purpose",
-            'Forwarding every message you receive',
-            'Turning off read receipts for everyone',
-          ],
-          correctIndex: 1,
-        },
-        {
-          id: 'q2',
-          prompt: 'A professional email should generally include...',
-          choices: [
-            'A clear subject line and a greeting',
-            'No subject line, to save time',
-            'Slang and abbreviations only',
-            'A blank body with just an attachment',
-          ],
+          prompt: 'What are the four stages of the design process covered in this lesson?',
+          choices: ['Discover, Define, Develop, Deliver', 'Plan, Build, Test, Launch', 'Research, Design, Code, Deploy', 'Sketch, Draw, Paint, Present'],
           correctIndex: 0,
         },
         {
-          id: 'q3',
-          prompt: 'Voice notes are especially useful for...',
+          id: 'q2',
+          prompt: 'Why is the design process iterative?',
           choices: [
-            'Sending large video files faster',
-            'Low-literacy contexts where typing is difficult',
-            'Replacing all typed messages permanently',
-            'Hiding information from the recipient',
+            'Because clients change their minds constantly',
+            'Because testing early ideas often reveals a better problem to solve',
+            'Because designers must repeat the same wireframe five times',
+            'Because each stage takes exactly one week',
           ],
           correctIndex: 1,
+        },
+        {
+          id: 'q3',
+          prompt: 'At which stage would you conduct user interviews?',
+          choices: ['Deliver', 'Develop', 'Discover', 'Define only'],
+          correctIndex: 2,
         },
       ],
     },
@@ -211,56 +182,91 @@ const smartphoneEssentialsLessons = [
   {
     id: 'lesson-4',
     order: 4,
-    module: 'Communication & Safety',
+    module: 'Research & Design',
     moduleOrder: 2,
-    title: 'Staying Safe Online',
+    title: 'User Research Basics',
     type: 'video',
     mediaUrl: null,
-    durationSeconds: 380,
+    durationSeconds: 324,
     content:
-      'Practical digital safety: choosing a strong password/PIN, recognizing common ' +
-      'phishing and scam messages (fake prize alerts, urgent "verify your account" ' +
-      'texts), and what personal information to never share over the phone or SMS.',
+      "Good design starts with understanding real users, not assumptions. This " +
+      'lesson covers the basics of user research: writing interview questions that ' +
+      'surface genuine needs rather than leading the user, synthesizing what you ' +
+      'learn into personas — fictional but research-based profiles representing key ' +
+      'user groups — and using empathy maps to capture what users think, feel, say, ' +
+      'and do.',
     objectives: [
-      'Choose a strong password or PIN',
-      'Recognize phishing and scam messages',
-      "Spot fake prize or urgent 'verify your account' texts",
-      'Know what personal information to never share',
+      'Write open-ended interview questions that avoid leading the user',
+      'Build a simple user persona from research notes',
+      'Use an empathy map to organize research findings',
     ],
     quiz: {
       questions: [
         {
           id: 'q1',
-          prompt: 'Which of these is a sign of a phishing message?',
+          prompt: "What's a leading question to avoid in a user interview?",
           choices: [
-            'It comes from a saved contact',
-            "An urgent request to 'verify your account' with a suspicious link",
-            'It has no attachments',
-            'It was sent during business hours',
+            '"Walk me through the last time you did this."',
+            '"Don\'t you think this feature would be great?"',
+            '"What was frustrating about that experience?"',
+            '"Can you show me how you currently solve this?"',
           ],
           correctIndex: 1,
         },
         {
           id: 'q2',
-          prompt: 'What makes a password or PIN strong?',
-          choices: [
-            'Using your birth year',
-            "Using '1234' for easy recall",
-            'Making it long, unique, and not easily guessed',
-            'Sharing it with close family so they can help if needed',
-          ],
+          prompt: 'A user persona is best described as...',
+          choices: ["A real person's exact profile", 'A fictional profile grounded in real research, representing a user group', 'A marketing target list', 'A wireframe of the login screen'],
+          correctIndex: 1,
+        },
+        {
+          id: 'q3',
+          prompt: 'An empathy map typically captures what a user...',
+          choices: ['Thinks, feels, says, and does', 'Bought, returned, and rated', 'Coded, tested, and shipped', 'Designed, drew, and presented'],
+          correctIndex: 0,
+        },
+      ],
+    },
+  },
+  {
+    id: 'lesson-5',
+    order: 5,
+    module: 'Research & Design',
+    moduleOrder: 2,
+    title: 'Wireframing in Practice',
+    type: 'video',
+    mediaUrl: null,
+    durationSeconds: 426,
+    content:
+      "Wireframes are low-fidelity sketches of a screen's layout and structure, used " +
+      'to test ideas quickly before investing in visual design. This lesson walks ' +
+      'through building a wireframe from a user flow: starting with rough boxes and ' +
+      'labels, then adding just enough detail to communicate hierarchy and ' +
+      'interaction — without getting distracted by color or type choices, which ' +
+      'come later in high-fidelity design.',
+    objectives: [
+      'Explain the difference between low-fidelity and high-fidelity wireframes',
+      'Turn a user flow into a basic wireframe layout',
+      'Know when to move from wireframes to high-fidelity design',
+    ],
+    quiz: {
+      questions: [
+        {
+          id: 'q1',
+          prompt: 'What is the main purpose of a low-fidelity wireframe?',
+          choices: ['To finalize brand colors', 'To test layout and structure quickly before visual design', 'To write production code', 'To replace user research'],
+          correctIndex: 1,
+        },
+        {
+          id: 'q2',
+          prompt: 'Which should you generally avoid focusing on in a wireframe?',
+          choices: ['Layout and hierarchy', 'Screen flow', 'Color and typography detail', 'Where buttons are placed'],
           correctIndex: 2,
         },
         {
           id: 'q3',
-          prompt:
-            "If you get an SMS saying you've won a prize and must reply with your bank PIN, you should...",
-          choices: [
-            'Reply immediately with your PIN',
-            'Never share your PIN and treat the message as a scam',
-            'Forward it to your contacts',
-            'Call the number in the message to confirm',
-          ],
+          prompt: 'When should you typically move from wireframes to high-fidelity design?',
+          choices: ['Immediately, skipping wireframes entirely', 'Once the layout and flow have been validated', 'Only after the product has launched', 'Never — wireframes replace final designs'],
           correctIndex: 1,
         },
       ],
@@ -304,7 +310,7 @@ const COURSES = [
     instructorBio:
       'Esther has spent her career designing products and teaching the next generation ' +
       'of designers practical, portfolio-ready UX/UI skills.',
-    lessons: smartphoneEssentialsLessons,
+    lessons: uiUxFundamentalsLessons,
   },
   {
     id: 'course-102',

@@ -333,6 +333,62 @@ export function RowsIcon(props) {
   )
 }
 
+export function CalendarIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" />
+    </svg>
+  )
+}
+
+export function ClockIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" />
+    </svg>
+  )
+}
+
+export function GraduationCapIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m2 8 10-4 10 4-10 4-10-4Z" />
+      <path d="M6 10.5V16c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-5.5" />
+      <path d="M22 8v6" />
+    </svg>
+  )
+}
+
+export function GlobeIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+    </svg>
+  )
+}
+
+export function MapPinIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 21s7-6.5 7-11.5a7 7 0 1 0-14 0C5 14.5 12 21 12 21Z" />
+      <circle cx="12" cy="9.5" r="2.5" />
+    </svg>
+  )
+}
+
+export function LinkIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9.5 14.5 14.5 9.5" />
+      <path d="M11 6.5 12.5 5a3.5 3.5 0 0 1 5 5L16 11.5" />
+      <path d="M13 17.5 11.5 19a3.5 3.5 0 0 1-5-5L8 12.5" />
+    </svg>
+  )
+}
+
 export function XCircleIcon(props) {
   return (
     <svg {...base} {...props}>

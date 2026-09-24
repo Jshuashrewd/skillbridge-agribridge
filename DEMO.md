@@ -32,7 +32,8 @@ called out explicitly in the product copy itself, so nothing looks broken.
    a fake gateway (no Paystack/Flutterwave), any method always "succeeds."
 7. **Start learning** — lands in the **Course Player**: video area,
    instructor row, overall progress bar, and the **Contents** sidebar with
-   lesson 1 unlocked and lessons 2–4 shown locked (lock icon).
+   lesson 1 ("Course Introduction") unlocked and lessons 2–5 shown locked
+   (lock icon).
 8. **Knowledge check** — click **Take knowledge check**. On question 1,
    deliberately pick a **wrong** answer and click **Check answer** — it
    turns red with "Not quite — pick another answer and try again," and lets
@@ -40,10 +41,10 @@ called out explicitly in the product copy itself, so nothing looks broken.
    sidebar's quiz-progress bar move, finish all 3 questions.
 9. **Lesson unlocks** — the "Lesson complete!" panel appears; click
    **Continue to [next lesson]** and note lesson 2 is now unlocked in the
-   sidebar (dark green circle). Repeat lessons 2–4 (can go faster — just
+   sidebar (dark green circle). Repeat lessons 2–5 (can go faster — just
    click through the quiz answers, wrong-answer retry doesn't need
    repeating every time).
-10. **Certificate** — finishing lesson 4's quiz routes straight to the
+10. **Certificate** — finishing lesson 5's quiz routes straight to the
     **Certificate** page: trophy, "Course complete!", then the certificate
     card itself — learner name, course title, date, unique certificate ID,
     and a real QR code. Click **Download PNG** or **Download PDF** to show
@@ -58,8 +59,9 @@ called out explicitly in the product copy itself, so nothing looks broken.
     nav: stat tiles (real counts, not fake data), an honest "You've
     completed every course you're enrolled in" message (since there's only
     the one real course right now), and the **Toolkits** section — one real
-    downloadable PDF (Mobile Money Safety Checklist, content drawn straight
-    from Lesson 2) plus three "Coming Soon" resources named after real
+    downloadable PDF (Design Process & Wireframing Quick Reference, content
+    drawn straight from Lessons 3 & 5) plus three "Coming Soon" resources
+    named after real
     upcoming curriculum tracks.
 
 ---

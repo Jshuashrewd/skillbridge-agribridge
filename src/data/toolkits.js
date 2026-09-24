@@ -3,27 +3,27 @@
 // as fake links.
 export const TOOLKITS = [
   {
-    id: 'mobile-money-safety-checklist',
-    title: 'Mobile Money Safety Checklist',
-    description: 'A one-page companion to "Calls, SMS & Mobile Money Basics" — what to check before you send, and the red flags to watch for.',
-    fileUrl: '/toolkits/mobile-money-safety-checklist.pdf',
+    id: 'design-process-wireframing-reference',
+    title: 'Design Process & Wireframing Quick Reference',
+    description: 'A one-page companion to "The Design Process" and "Wireframing in Practice" — the four stages, and how to keep a wireframe low-fidelity.',
+    fileUrl: '/toolkits/design-process-wireframing-reference.pdf',
   },
   {
-    id: 'whatsapp-work-reference',
-    title: 'WhatsApp for Work: Quick Reference',
-    description: 'Group etiquette and sharing files professionally.',
+    id: 'figma-component-checklist',
+    title: 'Figma Component Checklist',
+    description: 'From the Figma for Product Designers track.',
     comingSoon: true,
   },
   {
-    id: 'budgeting-worksheet',
-    title: 'Budgeting Worksheet for First-Time Earners',
-    description: 'From the Budgeting & Cash Flow Management track.',
+    id: 'product-roadmap-template',
+    title: 'Product Roadmap Template',
+    description: 'From the Product Management Essentials track.',
     comingSoon: true,
   },
   {
-    id: 'grant-pitch-outline',
-    title: 'Grant Pitch Outline Template',
-    description: 'From the Proposal Writing & Grant Pitching track.',
+    id: 'content-calendar-template',
+    title: 'Content Calendar Template',
+    description: 'From the Digital Marketing Strategy track.',
     comingSoon: true,
   },
 ]

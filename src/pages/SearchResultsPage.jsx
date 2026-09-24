@@ -6,15 +6,10 @@ import DiscoveryCourseCard from '../components/discovery/DiscoveryCourseCard'
 import SearchResultRow from '../components/discovery/SearchResultRow'
 import { ChevronDownIcon, GridIcon, RowsIcon, SearchIcon, SlidersIcon, SortIcon } from '../components/icons'
 import { useToast } from '../context/ToastContext'
+import { CATEGORY_GROUPS } from '../data/categoryGroups'
 import { db } from '../lib/firebase'
 
-const CATEGORY_FILTERS = [
-  { key: 'design', label: 'Design & Creative', categories: ['ui-ux-design', 'graphic-design', '3d-animation', 'photography', 'branding'] },
-  { key: 'business', label: 'Business', categories: ['business'] },
-  { key: 'technology', label: 'Technology', categories: ['technology'] },
-  { key: 'personal-development', label: 'Personal Development', categories: [] },
-  { key: 'marketing', label: 'Marketing', categories: ['business'] },
-]
+const CATEGORY_FILTERS = CATEGORY_GROUPS
 
 const LEVEL_FILTERS = ['Beginner', 'Intermediate', 'Advanced']
 

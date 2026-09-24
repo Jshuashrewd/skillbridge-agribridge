@@ -10,6 +10,7 @@ import CourseDiscoveryPage from './pages/CourseDiscoveryPage'
 import CoursePlayerPage from './pages/CoursePlayerPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import HomePage from './pages/HomePage'
+import InstructorProfilePage from './pages/InstructorProfilePage'
 import LearnerHubPage from './pages/LearnerHubPage'
 import LoginPage from './pages/LoginPage'
 import OnboardingPage from './pages/OnboardingPage'
@@ -90,6 +91,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <CoursePlayerPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/instructor/:slug"
+              element={
+                <ProtectedRoute>
+                  <InstructorProfilePage />
                 </ProtectedRoute>
               }
             />
