@@ -7,7 +7,10 @@ export default function TrendingCourseCard({ course, onSelect }) {
       onClick={() => onSelect?.(course)}
       className="focus-ring flex w-full min-w-0 items-center gap-sm rounded-md border border-neutral-200 bg-neutral-50 p-xs text-left transition-colors hover:border-green-600"
     >
-      <div className="h-[72px] w-[96px] shrink-0 rounded-sm bg-gradient-to-br from-green-700 to-green-900" />
+      <div
+        className="h-[72px] w-[96px] shrink-0 rounded-sm bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/discovery/trending-card.jpg')" }}
+      />
       <div className="min-w-0 flex-1">
         <p className="line-clamp-2 text-sm leading-tight text-neutral-950">{course.title}</p>
         {course.instructorName ? (

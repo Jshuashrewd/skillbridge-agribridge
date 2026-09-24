@@ -9,10 +9,12 @@ import CourseDetailPage from './pages/CourseDetailPage'
 import CourseDiscoveryPage from './pages/CourseDiscoveryPage'
 import CoursePlayerPage from './pages/CoursePlayerPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import HomePage from './pages/HomePage'
 import LearnerHubPage from './pages/LearnerHubPage'
 import LoginPage from './pages/LoginPage'
 import OnboardingPage from './pages/OnboardingPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
+import SearchResultsPage from './pages/SearchResultsPage'
 import SignUpPage from './pages/SignUpPage'
 import VerifyCertificatePage from './pages/VerifyCertificatePage'
 
@@ -32,6 +34,22 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <OnboardingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <SearchResultsPage />
                 </ProtectedRoute>
               }
             />

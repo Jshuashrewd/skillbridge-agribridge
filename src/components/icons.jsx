@@ -218,6 +218,121 @@ export function UsersIcon(props) {
   )
 }
 
+export function GridIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="3" width="8" height="8" rx="1.5" />
+      <rect x="13" y="3" width="8" height="8" rx="1.5" />
+      <rect x="3" y="13" width="8" height="8" rx="1.5" />
+      <rect x="13" y="13" width="8" height="8" rx="1.5" />
+    </svg>
+  )
+}
+
+export function MessageIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 5h16v11H8l-4 4V5Z" />
+    </svg>
+  )
+}
+
+export function SettingsIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H4a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.6V4a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V10a1.7 1.7 0 0 0 1.6 1H20a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1Z" />
+    </svg>
+  )
+}
+
+export function HelpCircleIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1.3 1-1.3 1.9v.3" />
+      <path d="M12 17h.01" />
+    </svg>
+  )
+}
+
+export function BellIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 9a6 6 0 0 1 12 0c0 3.4 1 5 1.5 5.7.3.4 0 1-.5 1H5c-.5 0-.8-.6-.5-1C5 14 6 12.4 6 9Z" />
+      <path d="M10 19a2 2 0 0 0 4 0" />
+    </svg>
+  )
+}
+
+export function BrushIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M9.5 14.5 15 5a2 2 0 1 1 4 2l-9.5 5.5" />
+      <path d="M9.5 14.5c1 1 1 2.5 0 3.5-1 1-2.5 1.5-4.5 1.5.5-2 .3-3.7-1-5 1.3-1.3 3.5-1 5.5 0Z" />
+    </svg>
+  )
+}
+
+export function BriefcaseIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="7" width="18" height="13" rx="2" />
+      <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M3 12h18" />
+    </svg>
+  )
+}
+
+export function CodeIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m9 8-4 4 4 4" />
+      <path d="m15 8 4 4-4 4" />
+    </svg>
+  )
+}
+
+export function SpeakerIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+      <path d="M16.5 9a4 4 0 0 1 0 6" />
+      <path d="M19 6a8 8 0 0 1 0 12" />
+    </svg>
+  )
+}
+
+export function SlidersIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 6h10M18 6h2M4 18h2M10 18h10" />
+      <circle cx="16" cy="6" r="2.3" />
+      <circle cx="7" cy="18" r="2.3" />
+    </svg>
+  )
+}
+
+export function SortIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m7 4-3 3.5h6L7 4Z" fill="currentColor" stroke="none" />
+      <path d="M7 8v12" />
+      <path d="m17 20 3-3.5h-6l3 3.5Z" fill="currentColor" stroke="none" />
+      <path d="M17 16V4" />
+    </svg>
+  )
+}
+
+export function RowsIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="3" y="4" width="18" height="6" rx="1.5" />
+      <rect x="3" y="14" width="18" height="6" rx="1.5" />
+    </svg>
+  )
+}
+
 export function XCircleIcon(props) {
   return (
     <svg {...base} {...props}>

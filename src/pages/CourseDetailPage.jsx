@@ -149,11 +149,15 @@ export default function CourseDetailPage() {
               </div>
             ) : null}
 
-            <div className="relative mt-lg flex h-[220px] items-center justify-center overflow-hidden rounded-md bg-gradient-to-br from-green-700 to-green-900 lg:h-[284px]">
+            <div
+              className="relative mt-lg flex h-[220px] items-center justify-center overflow-hidden rounded-md bg-cover bg-center lg:h-[284px]"
+              style={{ backgroundImage: "url('/images/discovery/course-card.jpg')" }}
+            >
+              <div aria-hidden className="absolute inset-0 bg-green-900/30" />
               <button
                 type="button"
                 onClick={() => showToast('Video playback is a styled placeholder for this prototype.')}
-                className="focus-ring flex flex-col items-center gap-xs"
+                className="focus-ring relative flex flex-col items-center gap-xs"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-50">
                   <PlayIcon className="h-5 w-5 text-green-700" />
@@ -290,7 +294,10 @@ function PriceCard({ course, enrolled, onEnroll, onContinue }) {
 
   return (
     <div className="mt-lg rounded-md border border-neutral-200 bg-neutral-50 p-md lg:mt-0">
-      <div className="h-[178px] w-full rounded-md bg-gradient-to-br from-green-700 to-green-900" />
+      <div
+        className="h-[178px] w-full rounded-md bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/discovery/course-card.jpg')" }}
+      />
       {enrolled ? (
         <>
           <p className="mt-md text-caption text-green-700">You're enrolled</p>

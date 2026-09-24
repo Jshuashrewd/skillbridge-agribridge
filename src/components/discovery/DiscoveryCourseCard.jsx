@@ -17,7 +17,10 @@ export default function DiscoveryCourseCard({ course, onSelect }) {
       onClick={() => onSelect?.(course)}
       className="focus-ring flex w-[220px] shrink-0 flex-col overflow-hidden rounded-md bg-neutral-50 text-left transition-opacity hover:opacity-90 sm:w-[250px] lg:w-[270px]"
     >
-      <div className="relative flex h-[140px] items-end justify-end rounded-sm bg-gradient-to-br from-green-700 to-green-900 p-xs">
+      <div
+        className="relative flex h-[140px] items-end justify-end rounded-sm bg-cover bg-center p-xs"
+        style={{ backgroundImage: "url('/images/discovery/course-card.jpg')" }}
+      >
         {isComingSoon ? (
           <span className="rounded-sm bg-amber-100 px-xs py-2xs text-caption font-semibold text-amber-700">
             Coming soon
